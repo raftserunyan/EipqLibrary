@@ -1,0 +1,81 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32112.339
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EipqLibrary.API", "EipqLibrary.API\EipqLibrary.API.csproj", "{CD2EF34F-2090-4BDA-B353-BEEDA674313C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{7B4E3AD2-DDF3-4811-9150-AC9D8F188C1C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{FF94E6B7-E759-4C35-95F6-BD12747B97C7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EipqLibrary.Infrastructure.Data", "EipqLibrary.Infrastructure.Data\EipqLibrary.Infrastructure.Data.csproj", "{AFF69E20-B589-4864-A32E-13612E0F2933}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EipqLibrary.Infrastructure.Business", "EipqLibrary.Infrastructure.Business\EipqLibrary.Infrastructure.Business.csproj", "{0EB553F0-71E9-469E-888C-AC43027E51C5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ServiceModels", "ServiceModels", "{C1962D79-9C24-49FF-A878-E3B2B85F966C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EipqLibrary.Services.Interfaces", "EipqLibrary.Services.Interfaces\EipqLibrary.Services.Interfaces.csproj", "{69528C26-C115-455D-A0E4-884579DE415B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EipqLibrary.Domain.Core", "EipqLibrary.Domain.Core\EipqLibrary.Domain.Core.csproj", "{ACEB2124-A3D4-4AD4-B597-E94822D1FC7A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EipqLibrary.Domain.Interfaces", "EipqLibrary.Domain.Interfaces\EipqLibrary.Domain.Interfaces.csproj", "{AF9AF7DA-096C-4604-AA09-71827B95CC8F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EipqLibrary.Shared", "EipqLibrary.Shared\EipqLibrary.Shared.csproj", "{8B2748F1-6EC7-4C55-BFF2-A0BEEB5F3E99}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EipqLibrary.Services.DTOs", "EipqLibrary.Services.DTOs\EipqLibrary.Services.DTOs.csproj", "{6D294376-DC42-4A66-B075-3F7064C5D8AD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CD2EF34F-2090-4BDA-B353-BEEDA674313C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD2EF34F-2090-4BDA-B353-BEEDA674313C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD2EF34F-2090-4BDA-B353-BEEDA674313C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD2EF34F-2090-4BDA-B353-BEEDA674313C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFF69E20-B589-4864-A32E-13612E0F2933}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFF69E20-B589-4864-A32E-13612E0F2933}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFF69E20-B589-4864-A32E-13612E0F2933}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFF69E20-B589-4864-A32E-13612E0F2933}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0EB553F0-71E9-469E-888C-AC43027E51C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EB553F0-71E9-469E-888C-AC43027E51C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EB553F0-71E9-469E-888C-AC43027E51C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EB553F0-71E9-469E-888C-AC43027E51C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69528C26-C115-455D-A0E4-884579DE415B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69528C26-C115-455D-A0E4-884579DE415B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69528C26-C115-455D-A0E4-884579DE415B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69528C26-C115-455D-A0E4-884579DE415B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACEB2124-A3D4-4AD4-B597-E94822D1FC7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACEB2124-A3D4-4AD4-B597-E94822D1FC7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACEB2124-A3D4-4AD4-B597-E94822D1FC7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACEB2124-A3D4-4AD4-B597-E94822D1FC7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF9AF7DA-096C-4604-AA09-71827B95CC8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF9AF7DA-096C-4604-AA09-71827B95CC8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF9AF7DA-096C-4604-AA09-71827B95CC8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF9AF7DA-096C-4604-AA09-71827B95CC8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B2748F1-6EC7-4C55-BFF2-A0BEEB5F3E99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B2748F1-6EC7-4C55-BFF2-A0BEEB5F3E99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B2748F1-6EC7-4C55-BFF2-A0BEEB5F3E99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B2748F1-6EC7-4C55-BFF2-A0BEEB5F3E99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D294376-DC42-4A66-B075-3F7064C5D8AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D294376-DC42-4A66-B075-3F7064C5D8AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D294376-DC42-4A66-B075-3F7064C5D8AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D294376-DC42-4A66-B075-3F7064C5D8AD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{AFF69E20-B589-4864-A32E-13612E0F2933} = {FF94E6B7-E759-4C35-95F6-BD12747B97C7}
+		{0EB553F0-71E9-469E-888C-AC43027E51C5} = {FF94E6B7-E759-4C35-95F6-BD12747B97C7}
+		{69528C26-C115-455D-A0E4-884579DE415B} = {C1962D79-9C24-49FF-A878-E3B2B85F966C}
+		{ACEB2124-A3D4-4AD4-B597-E94822D1FC7A} = {7B4E3AD2-DDF3-4811-9150-AC9D8F188C1C}
+		{AF9AF7DA-096C-4604-AA09-71827B95CC8F} = {7B4E3AD2-DDF3-4811-9150-AC9D8F188C1C}
+		{6D294376-DC42-4A66-B075-3F7064C5D8AD} = {C1962D79-9C24-49FF-A878-E3B2B85F966C}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {76AA2CD3-77F9-4D2A-814D-9981455C9C4C}
+	EndGlobalSection
+EndGlobal
