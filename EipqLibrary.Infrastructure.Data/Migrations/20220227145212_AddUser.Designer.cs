@@ -4,14 +4,16 @@ using EipqLibrary.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EipqLibrary.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(EipqLibraryDbContext))]
-    partial class EipqLibraryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220227145212_AddUser")]
+    partial class AddUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -94,12 +96,6 @@ namespace EipqLibrary.Infrastructure.Data.Migrations
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("GroupCreationYear")
-                        .HasColumnType("int");
-
-                    b.Property<string>("GroupNumber")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
@@ -128,9 +124,6 @@ namespace EipqLibrary.Infrastructure.Data.Migrations
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
 
                     b.Property<string>("StudentCardNumber")
                         .HasColumnType("nvarchar(max)");

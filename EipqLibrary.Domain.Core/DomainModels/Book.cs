@@ -3,7 +3,7 @@ using EipqLibrary.Domain.Core.Enums;
 
 namespace EipqLibrary.Domain.Core.DomainModels
 {
-    public class Book : BaseEntity<int>
+    public class Book : BaseEntity
     {
         public string Name { get; set; }
         public string Author { get; set; }
