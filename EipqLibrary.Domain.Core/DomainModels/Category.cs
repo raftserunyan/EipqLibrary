@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace EipqLibrary.Domain.Core.DomainModels
 {
-    public class Category : BaseEntity<int>
+    public class Category : BaseEntity
     {
         public string Name { get; set; }
 
