@@ -12,5 +12,6 @@ namespace EipqLibrary.Infrastructure.Data
 
         public DbSet<Book> Books { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<PublicRefreshToken> PublicRefreshTokens { get; set; }
     }
 }

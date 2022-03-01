@@ -4,6 +4,11 @@ using EipqLibrary.Infrastructure.Business.Services;
 using EipqLibrary.Infrastructure.Data;
 using EipqLibrary.Services.DTOs.MapperProfiles;
 using EipqLibrary.Services.Interfaces.ServiceInterfaces;
+using EipqLibrary.Shared.SharedSettings;
+using EipqLibrary.Shared.SharedSettings.Interfaces;
+using EipqLibrary.Shared.Web.Services;
+using EipqLibrary.Shared.Web.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -11,16 +16,22 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
+using System.Text;
 
 namespace EipqLibrary.API
 {
     public class Startup
     {
+        public AppConfig AppConfig { get; }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            AppConfig = new AppConfig();
+            configuration.GetSection("AppConfig").Bind(AppConfig);
         }
 
         public IConfiguration Configuration { get; }
@@ -28,6 +39,8 @@ namespace EipqLibrary.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IAppConfig>(AppConfig);
+            services.AddSingleton(AppConfig.JwtSettings);
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -56,11 +69,38 @@ namespace EipqLibrary.API
                 options.Tokens.EmailConfirmationTokenProvider = "emailconfirmation";
             });
 
+            // Configuring authentication JWT Token
+            var key = Encoding.ASCII.GetBytes(AppConfig.JwtSettings.JwtTokenSecret);
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ClockSkew = TimeSpan.Zero
+            };
+            services.AddSingleton(tokenValidationParameters);
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(options =>
+                {
+                    options.RequireHttpsMetadata = false;
+                    options.SaveToken = true;
+                    options.TokenValidationParameters = tokenValidationParameters;
+                });
+
             // Services
             services.AddAutoMapper(typeof(BookProfile), typeof(CategoryProfile));
             services.AddScoped<IBookService, BookService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IPublicIdentityService, PublicIdentityService>();
+            services.AddScoped<IPublicRefreshTokenService, PublicRefreshTokenService>();
+            services.AddScoped<ITokenService>(x => x.GetRequiredService<TokenService>());
+            services.AddScoped<TokenService>();
+            services.AddScoped<ICurrentUserService>(x => x.GetRequiredService<TokenService>());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

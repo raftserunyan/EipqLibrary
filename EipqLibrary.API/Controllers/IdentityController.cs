@@ -1,7 +1,7 @@
 ﻿using EipqLibrary.Services.DTOs.Models;
 using EipqLibrary.Services.DTOs.RequestModels;
 using EipqLibrary.Services.Interfaces.ServiceInterfaces;
-using Microsoft.AspNetCore.Http;
+using EipqLibrary.Shared.Web.Dtos.Tokens;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Threading.Tasks;
@@ -24,6 +24,15 @@ namespace EipqLibrary.API.Controllers
         public async Task<IActionResult> RegisterUser([FromBody] RegistrationRequest request)
         {
             var authResponse = await _identityService.Register(request);
+
+            return Ok(authResponse);
+        }
+
+        [HttpPost("login")]
+        [ProducesResponseType(typeof(AuthenticationResponse), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> Login([FromBody] AuthenticationRequest request)
+        {
+            var authResponse = await _identityService.Login(request);
 
             return Ok(authResponse);
         }
