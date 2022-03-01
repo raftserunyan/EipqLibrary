@@ -1,4 +1,3 @@
-using EipqLibrary.API.Security;
 using EipqLibrary.Domain.Core.DomainModels;
 using EipqLibrary.EmailService.Extensions;
 using EipqLibrary.EmailService.Models;
@@ -23,7 +22,7 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Text;
 
-namespace EipqLibrary.API
+namespace EipqLibrary.Admin
 {
     public class Startup
     {
@@ -58,9 +57,7 @@ namespace EipqLibrary.API
 
             services.AddIdentity<User, IdentityRole>(o => o.User.RequireUniqueEmail = true)
                 .AddEntityFrameworkStores<EipqLibraryDbContext>()
-                 .AddTokenProvider<DataProtectorTokenProvider<User>>(TokenOptions.DefaultProvider)
-                .AddTokenProvider<EmailConfirmationTokenProvider<User>>("emailconfirmation")
-                 .AddTokenProvider<ResetTokenProvider<User>>("resetpassword");
+                 .AddTokenProvider<DataProtectorTokenProvider<User>>(TokenOptions.DefaultProvider);
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -103,7 +100,8 @@ namespace EipqLibrary.API
             services.AddScoped<ITokenService>(x => x.GetRequiredService<TokenService>());
             services.AddScoped<TokenService>();
             services.AddScoped<ICurrentUserService>(x => x.GetRequiredService<TokenService>());
-
+            services.AddScoped<IUserService, UserService>();
+            
             // Email Service
             services.AddEmailService();
 
@@ -119,7 +117,7 @@ namespace EipqLibrary.API
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "EipqLibrary.API v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "EipqLibrary.Admin v1"));
             }
 
             app.UseRouting();
