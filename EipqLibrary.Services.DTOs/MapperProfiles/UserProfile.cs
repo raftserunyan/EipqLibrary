@@ -12,6 +12,7 @@ namespace EipqLibrary.Services.DTOs.MapperProfiles
             CreateMap<RegistrationRequest, User>().ReverseMap();
             CreateMap<UserCreationDto, User>().ReverseMap();
             CreateMap<RegistrationRequest, UserCreationDto>().ReverseMap();
+            CreateMap<User, UpdateUserStatusDto>().ReverseMap();
         }
     }
 }
