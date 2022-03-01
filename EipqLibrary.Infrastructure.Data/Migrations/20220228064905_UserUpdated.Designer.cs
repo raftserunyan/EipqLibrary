@@ -4,14 +4,16 @@ using EipqLibrary.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EipqLibrary.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(EipqLibraryDbContext))]
-    partial class EipqLibraryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220228064905_UserUpdated")]
+    partial class UserUpdated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -70,33 +72,6 @@ namespace EipqLibrary.Infrastructure.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
-                });
-
-            modelBuilder.Entity("EipqLibrary.Domain.Core.DomainModels.PublicRefreshToken", b =>
-                {
-                    b.Property<string>("Token")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("AccessTokenId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DeviceId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("ExpiryDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Token");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("PublicRefreshTokens");
                 });
 
             modelBuilder.Entity("EipqLibrary.Domain.Core.DomainModels.User", b =>
@@ -322,15 +297,6 @@ namespace EipqLibrary.Infrastructure.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("EipqLibrary.Domain.Core.DomainModels.PublicRefreshToken", b =>
-                {
-                    b.HasOne("EipqLibrary.Domain.Core.DomainModels.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

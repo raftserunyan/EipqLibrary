@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EipqLibrary.Infrastructure.Data
 {
-    public class EipqLibraryDbContext : IdentityDbContext
+    public class EipqLibraryDbContext : IdentityDbContext<User>
     {
         public EipqLibraryDbContext(DbContextOptions<EipqLibraryDbContext> options) : base(options)
         {
@@ -12,5 +12,6 @@ namespace EipqLibrary.Infrastructure.Data
 
         public DbSet<Book> Books { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<PublicRefreshToken> PublicRefreshTokens { get; set; }
     }
 }

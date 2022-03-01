@@ -4,14 +4,16 @@ using EipqLibrary.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EipqLibrary.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(EipqLibraryDbContext))]
-    partial class EipqLibraryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220227145212_AddUser")]
+    partial class AddUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -72,33 +74,6 @@ namespace EipqLibrary.Infrastructure.Data.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("EipqLibrary.Domain.Core.DomainModels.PublicRefreshToken", b =>
-                {
-                    b.Property<string>("Token")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("AccessTokenId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DeviceId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("ExpiryDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Token");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("PublicRefreshTokens");
-                });
-
             modelBuilder.Entity("EipqLibrary.Domain.Core.DomainModels.User", b =>
                 {
                     b.Property<string>("Id")
@@ -119,12 +94,6 @@ namespace EipqLibrary.Infrastructure.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("GroupCreationYear")
-                        .HasColumnType("int");
-
-                    b.Property<string>("GroupNumber")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
@@ -155,9 +124,6 @@ namespace EipqLibrary.Infrastructure.Data.Migrations
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
 
                     b.Property<string>("StudentCardNumber")
                         .HasColumnType("nvarchar(max)");
@@ -322,15 +288,6 @@ namespace EipqLibrary.Infrastructure.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("EipqLibrary.Domain.Core.DomainModels.PublicRefreshToken", b =>
-                {
-                    b.HasOne("EipqLibrary.Domain.Core.DomainModels.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
