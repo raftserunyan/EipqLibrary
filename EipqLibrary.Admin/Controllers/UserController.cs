@@ -1,5 +1,4 @@
 ﻿using EipqLibrary.EmailService.Interfaces;
-using EipqLibrary.Services.DTOs.Models;
 using EipqLibrary.Services.DTOs.RequestModels;
 using EipqLibrary.Services.Interfaces.ServiceInterfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -36,6 +35,8 @@ namespace EipqLibrary.Admin.Controllers
         public async Task<IActionResult> ConfirmUserAccount(string userId)
         {
             var user = await _userService.ConfirmUserAccount(userId);
+            var emailMessage = _emailService.GenerateRegistrationDeniedMailMessage(user.Email);
+            await _emailService.SendEmailMessageAsync(emailMessage);
 
             return NoContent();
         }

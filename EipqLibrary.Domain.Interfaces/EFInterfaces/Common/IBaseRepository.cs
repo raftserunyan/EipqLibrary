@@ -8,7 +8,8 @@ namespace EipqLibrary.Domain.Interfaces.EFInterfaces.Common
     public interface IBaseRepository<T> where T : class
     {
         public Task AddAsync(T entity);
-        public Task<List<T>> GetAllAsync();
+        public Task<bool> ExistsAsync(Expression<Func<T, bool>> predicate);
+        public Task<List<T>> GetAllAsync(Expression<Func<T, bool>> predicate = null);
         public Task<List<T>> GetAllWithIncludeAsync(params Expression<Func<T, object>>[] includeExpressions);
         public Task<List<T>> GetAllWithIncludeAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeExpressions);
         public Task<T> GetByIdAsync(int entityId);
