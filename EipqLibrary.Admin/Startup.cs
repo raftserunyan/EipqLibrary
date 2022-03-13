@@ -12,6 +12,7 @@ using EipqLibrary.Shared.Web.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -101,7 +102,9 @@ namespace EipqLibrary.Admin
             services.AddScoped<TokenService>();
             services.AddScoped<ICurrentUserService>(x => x.GetRequiredService<TokenService>());
             services.AddScoped<IUserService, UserService>();
-            
+            services.AddScoped<IGroupService, GroupService>();
+            services.AddScoped<IProfessionService, ProfessionService>();
+
             // Email Service
             services.AddEmailService();
 
@@ -113,14 +116,16 @@ namespace EipqLibrary.Admin
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "EipqLibrary.Admin v1"));
-            }
+            app.UseDeveloperExceptionPage();
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "EipqLibrary.Admin v1"));
 
             app.UseRouting();
+
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
 
             app.UseAuthorization();
 

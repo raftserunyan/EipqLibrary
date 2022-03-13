@@ -4,14 +4,16 @@ using EipqLibrary.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EipqLibrary.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(EipqLibraryDbContext))]
-    partial class EipqLibraryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220310194911_GroupsAndProfessionsAdded")]
+    partial class GroupsAndProfessionsAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -79,11 +81,11 @@ namespace EipqLibrary.Infrastructure.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("CreationYear")
+                        .HasColumnType("int");
 
-                    b.Property<DateTime>("GraduationDate")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("GraduationYear")
+                        .HasColumnType("int");
 
                     b.Property<string>("Number")
                         .HasColumnType("nvarchar(max)");

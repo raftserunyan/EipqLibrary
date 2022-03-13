@@ -23,9 +23,14 @@ namespace EipqLibrary.Infrastructure.Data.Repositories.Common
             await _context.AddAsync(entity);
         }
 
-        public async Task<List<T>> GetAllAsync()
+        public async Task<bool> ExistsAsync(Expression<Func<T, bool>> predicate)
         {
-            return await _context.Set<T>().ToListAsync();
+            return !(await _context.Set<T>().FirstOrDefaultAsync(predicate) == default(T));
+        }
+
+        public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _context.Set<T>().Where(predicate).ToListAsync();
         }
 
         public async Task<List<T>> GetAllWithIncludeAsync(params Expression<Func<T, object>>[] includeExpressions)
