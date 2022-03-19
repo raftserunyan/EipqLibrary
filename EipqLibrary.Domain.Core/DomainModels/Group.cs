@@ -14,5 +14,13 @@ namespace EipqLibrary.Domain.Core.DomainModels
         public Profession Profession { get; set; }
 
         public IEnumerable<User> Students { get; set; }
+
+        public bool IsActive
+        {
+            get
+            {
+                return this.GraduationDate > DateTime.Now;
+            }
+        }
     }
 }

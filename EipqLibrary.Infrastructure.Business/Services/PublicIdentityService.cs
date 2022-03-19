@@ -22,18 +22,21 @@ namespace EipqLibrary.Infrastructure.Business.Services
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IGroupService _groupService;
         private readonly ITokenService _tokenService;
         private readonly IPublicRefreshTokenService _refreshTokenService;
 
         public PublicIdentityService(UserManager<User> userManager,
                                      IMapper mapper, 
                                      IUnitOfWork unitOfWork,
+                                     IGroupService groupService,
                                      ITokenService tokenService,
                                      IPublicRefreshTokenService refreshTokenService)
         {
             _userManager = userManager;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _groupService = groupService;
             _tokenService = tokenService;
             _refreshTokenService = refreshTokenService;
         }
@@ -41,19 +44,18 @@ namespace EipqLibrary.Infrastructure.Business.Services
         public async Task<RegistrationResponse> Register(RegistrationRequest request)
         {
             var userCreationDto = _mapper.Map<UserCreationDto>(request);
-            var newUser = await CreateUser(userCreationDto);
+            await CreateUser(userCreationDto);
 
             return new RegistrationResponse("Շնորհակալություն\nՁեր գրանցման հայտը ուղարկվել է հաստատման\nԱրդյունքի մասին դուք կստանաք հաղորդագրություն ձեր կողմից նշված էլ․հասցեին");
         }
 
         public async Task<AuthenticationResponse> Login(AuthenticationRequest request)
         {
-            var user = await _userManager.FindByEmailAsync(request.Email);
+            var user = await _userManager.FindByEmailAsync(request.Username);
 
             if (user != null
                 && user.Status == UserStatus.BlockedByBruteforce
-                && DateTime.Compare(DateTime.UtcNow, user.LockoutEnd.Value.DateTime) > 0
-                && user.EmailConfirmed)
+                && DateTime.Compare(DateTime.UtcNow, user.LockoutEnd.Value.DateTime) > 0)
             {
                 user.Status = UserStatus.Active;
                 await _unitOfWork.SaveChangesAsync();
@@ -104,11 +106,11 @@ namespace EipqLibrary.Infrastructure.Business.Services
         private async Task<User> CreateUser(UserCreationDto userCreationDto)
         {
             var newUser = _mapper.Map<User>(userCreationDto);
+            newUser.GroupId = (await _groupService.GetActiveByNumberAsync(userCreationDto.GroupNumber)).Id;
             newUser.UserName = userCreationDto.Email;
+            newUser.RegistrationDate = DateTime.Now;
 
-            var creationResult = userCreationDto.Password == null
-                ? await _userManager.CreateAsync(newUser)
-                : await _userManager.CreateAsync(newUser, userCreationDto.Password);
+            var creationResult = await _userManager.CreateAsync(newUser, userCreationDto.Password);
 
             if (!creationResult.Succeeded)
             {

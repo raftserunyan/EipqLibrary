@@ -16,10 +16,10 @@ namespace EipqLibrary.Services.DTOs.RequestModels
         [Required]
         [StringLength(maximumLength: 32, MinimumLength = 1)]
         public string LastName { get; set; }
+        [Phone]
+        public string PhoneNumber { get; set; }
 
         public string GroupNumber { get; set; }
-
-        public string PhoneNumber { get; set; }
         public string StudentCardNumber { get; set; }
     }
 }

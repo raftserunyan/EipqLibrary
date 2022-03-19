@@ -23,6 +23,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Text;
+using EipqLibrary.API.Extensions;
 
 namespace EipqLibrary.API
 {
@@ -39,7 +40,6 @@ namespace EipqLibrary.API
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IAppConfig>(AppConfig);
@@ -50,6 +50,7 @@ namespace EipqLibrary.API
                 {
                     options.SerializerSettings.Converters.Add(new StringEnumConverter());
                 });
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "EipqLibrary.API", Version = "v1" });
@@ -71,7 +72,8 @@ namespace EipqLibrary.API
             {
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
                 options.Lockout.MaxFailedAccessAttempts = 5;
-                options.SignIn.RequireConfirmedEmail = true;
+                options.SignIn.RequireConfirmedEmail = false;
+                options.User.RequireUniqueEmail = false;
                 options.Tokens.PasswordResetTokenProvider = "resetpassword";
                 options.Tokens.EmailConfirmationTokenProvider = "emailconfirmation";
             });
@@ -119,10 +121,11 @@ namespace EipqLibrary.API
             services.AddSingleton(emailSettings);
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseDeveloperExceptionPage();
+            //app.UseDeveloperExceptionPage();
+            app.UseExceptionHandler("/error");
+            app.UseExceptionHandling();
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "EipqLibrary.API v1"));
 

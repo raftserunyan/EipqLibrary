@@ -45,14 +45,18 @@ namespace EipqLibrary.Infrastructure.Business.Services
             return await _professionRepository.ExistsAsync(x => x.Id == professionId);
         }
 
-        public Task<List<ProfessionModel>> GetAllAsync()
+        public async Task<List<ProfessionModel>> GetAllAsync()
         {
-            throw new System.NotImplementedException();
+            var professions = await _professionRepository.GetAllAsync();
+
+            return _mapper.Map<List<ProfessionModel>>(professions);
         }
 
-        public Task<ProfessionModel> GetByIdAsync(int id)
+        public async Task<ProfessionModel> GetByIdAsync(int id)
         {
-            throw new System.NotImplementedException();
+            var profession = await _professionRepository.GetByIdAsync(id);
+
+            return _mapper.Map<ProfessionModel>(profession);
         }
     }
 }

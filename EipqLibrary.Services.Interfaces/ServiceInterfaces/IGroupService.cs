@@ -10,5 +10,6 @@ namespace EipqLibrary.Services.Interfaces.ServiceInterfaces
         Task<GroupModel> Create(GroupCreationRequest groupCreationRequest);
         Task<GroupModel> GetByIdAsync(int id, bool includeInactive = false);
         Task<List<GroupModel>> GetAllAsync(bool includeInactive = false);
+        Task<GroupModel> GetActiveByNumberAsync(string groupNumber);
     }
 }

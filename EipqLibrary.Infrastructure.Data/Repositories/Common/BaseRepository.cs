@@ -28,6 +28,11 @@ namespace EipqLibrary.Infrastructure.Data.Repositories.Common
             return !(await _context.Set<T>().FirstOrDefaultAsync(predicate) == default(T));
         }
 
+        public async Task<List<T>> GetAllAsync()
+        {
+            return await _context.Set<T>().ToListAsync();
+        }
+
         public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>> predicate)
         {
             return await _context.Set<T>().Where(predicate).ToListAsync();
@@ -57,6 +62,11 @@ namespace EipqLibrary.Infrastructure.Data.Repositories.Common
             var table = GetAllInclude(includeExpressions);
 
             return await table.FirstOrDefaultAsync(x => x.Id == entityId);
+        }
+
+        public async Task<T> GetFirstAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _context.Set<T>().FirstOrDefaultAsync(predicate);
         }
 
         public async Task<T> GetFirstWithIncludeAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeExpressions)

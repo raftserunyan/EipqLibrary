@@ -11,7 +11,6 @@ namespace EipqLibrary.Services.DTOs.Models
         public string LastName { get; set; }
 
         public string GroupNumber { get; set; }
-        public int? GroupCreationYear { get; set; }
 
         public string PhoneNumber { get; set; }
         public string StudentCardNumber { get; set; }

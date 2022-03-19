@@ -23,9 +23,9 @@ namespace EipqLibrary.API.Controllers
         [ProducesResponseType(typeof(RegistrationResponse), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> RegisterUser([FromBody] RegistrationRequest request)
         {
-            var authResponse = await _identityService.Register(request);
+            var registrationResponse = await _identityService.Register(request);
 
-            return Ok(authResponse);
+            return Ok(registrationResponse);
         }
 
         [HttpPost("login")]
