@@ -16,5 +16,6 @@ namespace EipqLibrary.Infrastructure.Data
         public DbSet<Profession> Professions { get; set; }
         public DbSet<PublicRefreshToken> PublicRefreshTokens { get; set; }
         public DbSet<User> Students { get; set; }
+        public DbSet<AdminRefreshToken> AdminRefreshTokens { get; set; }
     }
 }

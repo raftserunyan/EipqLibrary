@@ -59,14 +59,14 @@ namespace EipqLibrary.Infrastructure.Business.Services
 
         public async Task<List<GroupModel>> GetAllAsync(bool includeInactive = false)
         {
-            var groups = await _groupRepo.GetAllAsync(x => includeInactive || x.GraduationDate > DateTime.Now);
+            var groups = await _groupRepo.GetAllWithIncludeAsync(x => includeInactive || x.GraduationDate > DateTime.Now, x => x.Profession);
 
             return _mapper.Map<List<GroupModel>>(groups);
         }
 
         public async Task<GroupModel> GetByIdAsync(int id, bool includeInactive = false)
         {
-            var group = await _groupRepo.GetFirstAsync(x => x.Id == id && (includeInactive || x.GraduationDate > DateTime.Now));
+            var group = await _groupRepo.GetFirstWithIncludeAsync(x => x.Id == id && (includeInactive || x.GraduationDate > DateTime.Now), x => x.Profession);
             EnsureExists(group);
 
             return _mapper.Map<GroupModel>(group);

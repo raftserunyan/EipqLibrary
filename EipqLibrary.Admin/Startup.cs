@@ -7,8 +7,6 @@ using EipqLibrary.Services.DTOs.MapperProfiles;
 using EipqLibrary.Services.Interfaces.ServiceInterfaces;
 using EipqLibrary.Shared.SharedSettings;
 using EipqLibrary.Shared.SharedSettings.Interfaces;
-using EipqLibrary.Shared.Web.Services;
-using EipqLibrary.Shared.Web.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -17,7 +15,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Converters;
@@ -61,15 +58,14 @@ namespace EipqLibrary.Admin
             services.AddDbContext<EipqLibraryDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("EipqLibraryConnectionString")));
 
-            services.AddIdentity<User, IdentityRole>(o => o.User.RequireUniqueEmail = true)
-                .AddEntityFrameworkStores<EipqLibraryDbContext>()
-                 .AddTokenProvider<DataProtectorTokenProvider<User>>(TokenOptions.DefaultProvider);
-
+            services.AddIdentity<AdminUser, IdentityRole>(o => o.User.RequireUniqueEmail = true)
+                .AddEntityFrameworkStores<EipqLibraryDbContext>();
+                
             services.Configure<IdentityOptions>(options =>
             {
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
                 options.Lockout.MaxFailedAccessAttempts = 5;
-                options.SignIn.RequireConfirmedEmail = true;
+                options.SignIn.RequireConfirmedEmail = false;
                 options.Tokens.PasswordResetTokenProvider = "resetpassword";
                 options.Tokens.EmailConfirmationTokenProvider = "emailconfirmation";
             });
@@ -99,16 +95,12 @@ namespace EipqLibrary.Admin
 
             // Services
             services.AddAutoMapper(typeof(BookProfile), typeof(CategoryProfile));
-            services.AddScoped<IBookService, BookService>();
-            services.AddScoped<ICategoryService, CategoryService>();
-            services.AddScoped<IPublicIdentityService, PublicIdentityService>();
-            services.AddScoped<IPublicRefreshTokenService, PublicRefreshTokenService>();
-            services.AddScoped<ITokenService>(x => x.GetRequiredService<TokenService>());
-            services.AddScoped<TokenService>();
-            services.AddScoped<ICurrentUserService>(x => x.GetRequiredService<TokenService>());
-            services.AddScoped<IUserService, UserService>();
             services.AddScoped<IGroupService, GroupService>();
             services.AddScoped<IProfessionService, ProfessionService>();
+            services.AddScoped<IAdminIdentityService, AdminIdentityService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAdminIdentityService, AdminIdentityService>();
+            services.AddScoped<IAdminRefreshTokenService, AdminRefreshTokenService>();
 
             // Email Service
             services.AddEmailService();
