@@ -49,6 +49,14 @@ namespace EipqLibrary.Infrastructure.Business.Services
             return _mapper.Map<GroupModel>(group);
         }
 
+        public async Task<GroupModel> GetActiveByNumberAsync(string groupNumber)
+        {
+            var group = await _groupRepo.GetFirstAsync(x => x.Number == groupNumber && x.GraduationDate > DateTime.Now);
+            EnsureExists(group, $"Group '{groupNumber}' not found in active groups");
+
+            return _mapper.Map<GroupModel>(group);
+        }
+
         public async Task<List<GroupModel>> GetAllAsync(bool includeInactive = false)
         {
             var groups = await _groupRepo.GetAllAsync(x => includeInactive || x.GraduationDate > DateTime.Now);
@@ -58,7 +66,7 @@ namespace EipqLibrary.Infrastructure.Business.Services
 
         public async Task<GroupModel> GetByIdAsync(int id, bool includeInactive = false)
         {
-            var group = await _groupRepo.GetFirstWithIncludeAsync(x => x.Id == id && (includeInactive || x.GraduationDate > DateTime.Now));
+            var group = await _groupRepo.GetFirstAsync(x => x.Id == id && (includeInactive || x.GraduationDate > DateTime.Now));
             EnsureExists(group);
 
             return _mapper.Map<GroupModel>(group);

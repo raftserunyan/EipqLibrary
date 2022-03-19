@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EipqLibrary.Domain.Core.AggregatedEntities;
 using EipqLibrary.Domain.Core.DomainModels;
 using EipqLibrary.Domain.Core.Enums;
 using EipqLibrary.Domain.Interfaces.EFInterfaces;
@@ -16,15 +17,18 @@ namespace EipqLibrary.Infrastructure.Business.Services
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IUserRepository _userRepository;
         private readonly UserManager<User> _userManager;
 
         public UserService(IMapper mapper,
                             IUnitOfWork unitOfWork,
-                            UserManager<User> userManager)
+                            UserManager<User> userManager,
+                            IUserRepository userRepository)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _userManager = userManager;
+            _userRepository = userRepository;
         }
 
         public async Task<User> ConfirmUserAccount(string userId)
@@ -65,6 +69,16 @@ namespace EipqLibrary.Infrastructure.Business.Services
             await _unitOfWork.SaveChangesAsync();
 
             return _mapper.Map<UpdateUserStatusDto>(userToUpdate);
+        }
+
+        public async Task<PagedData<UserDto>> GetAllAsync(PageInfo pageInfo, UserSortOption userSort, UserStatus? status)
+        {
+            var pagedUsers = await _userRepository.GetAllAsync(pageInfo, userSort, status);
+            EnsureExists(pagedUsers);
+
+            var pagedUserDtos = _mapper.Map<PagedData<UserDto>>(pagedUsers);
+
+            return pagedUserDtos;
         }
 
         private static Exception InvalidDeleteException(string email)

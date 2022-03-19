@@ -13,6 +13,7 @@ namespace EipqLibrary.Infrastructure.Data
             services.AddScoped<IPublicRefreshTokenRepository, PublicRefreshTokenRepository>();
             services.AddScoped<IGroupRepository, GroupRepository>();
             services.AddScoped<IProfessionRepository, ProfessionRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             return services;
         }
