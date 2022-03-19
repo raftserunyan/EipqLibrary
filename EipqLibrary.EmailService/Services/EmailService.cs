@@ -53,6 +53,14 @@ namespace EipqLibrary.EmailService.Services
             return mailMessage;
         }
 
+        public MailMessage GenerateAdminRegistrationMailMessage(string emailTo, string userPassword)
+        {
+            var mailMessage = GenerateMailMessage(emailTo, "ԵԻՊՔ Գրադարան - Ձեր նոր հաշվի տվյալները");
+            mailMessage.Body = $"Բարի գալուստ ԵԻՊՔ Գրադարան! <br> Օգտագործեք հետևյալ գաղտնաբառը ձեր հաշիվ մուտք գործելու համար: <b>{userPassword}</b>";
+            mailMessage.IsBodyHtml = true;
+            return mailMessage;
+        }
+
         private MailAddress SenderEmailAddress => new MailAddress(_emailSettings.Mail, _emailSettings.DisplayName);
     }
 }

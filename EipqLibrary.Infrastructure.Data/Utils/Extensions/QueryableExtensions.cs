@@ -23,6 +23,11 @@ namespace EipqLibrary.Infrastructure.Data.Utils.Extensions
             return ApplyOrder(source.AsQueryable(), property, "OrderByDescending");
         }
 
+        public static PagedData<T> PagedList<T>(this List<T> source, PageInfo pageInfo)
+        {
+            return source.PagedList(pageInfo.Page, pageInfo.ItemsPerPage);
+        }
+
         public static async Task<PagedData<T>> Paged<T>(this IQueryable<T> source, PageInfo pageInfo)
         {
             var count = source.Count();
@@ -34,6 +39,21 @@ namespace EipqLibrary.Infrastructure.Data.Utils.Extensions
                     .Skip((pageInfo.Page - 1) * pageInfo.ItemsPerPage)
                     .Take(pageInfo.ItemsPerPage)
                     .ToListAsync()
+            };
+        }
+
+        private static PagedData<T> PagedList<T>(this IReadOnlyCollection<T> source, int page,
+            int pageSize)
+        {
+            var count = source.Count();
+
+            return new PagedData<T>
+            {
+                Page = new Page(count, pageSize, page),
+                Data = source
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToList()
             };
         }
 

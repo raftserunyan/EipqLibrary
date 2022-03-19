@@ -7,7 +7,6 @@ using EipqLibrary.Services.DTOs.Models;
 using EipqLibrary.Services.DTOs.RequestModels;
 using EipqLibrary.Services.Interfaces.ServiceInterfaces;
 using EipqLibrary.Shared.CustomExceptions;
-using Microsoft.AspNetCore.Identity;
 using System;
 using System.Threading.Tasks;
 
@@ -18,22 +17,19 @@ namespace EipqLibrary.Infrastructure.Business.Services
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUserRepository _userRepository;
-        private readonly UserManager<User> _userManager;
 
         public UserService(IMapper mapper,
                             IUnitOfWork unitOfWork,
-                            UserManager<User> userManager,
                             IUserRepository userRepository)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
-            _userManager = userManager;
             _userRepository = userRepository;
         }
 
         public async Task<User> ConfirmUserAccount(string userId)
         {
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await _userRepository.FindAsync(u => u.Id == userId);
             EnsureExists(user);
 
             user.Status = UserStatus.Active;
@@ -43,14 +39,10 @@ namespace EipqLibrary.Infrastructure.Business.Services
         }
         public async Task<User> DeleteUserAccount(string userId)
         {
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await _userRepository.FindAsync(u => u.Id == userId);
             EnsureExists(user);
 
-            var deletionResult = await _userManager.DeleteAsync(user);
-            if (!deletionResult.Succeeded)
-            {
-                throw InvalidDeleteException(user.Email);
-            }
+            _userRepository.Delete(user);
 
             return user;
         }
@@ -62,7 +54,7 @@ namespace EipqLibrary.Infrastructure.Business.Services
                 throw new BadDataException();
             }
 
-            var userToUpdate = await _userManager.FindByIdAsync(customerUpdateRequest.Id);
+            var userToUpdate = await _userRepository.FindAsync(u => u.Id == customerUpdateRequest.Id);
             EnsureExists(userToUpdate);
 
             userToUpdate.Status = customerUpdateRequest.Status;
