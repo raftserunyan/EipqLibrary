@@ -58,6 +58,8 @@ namespace EipqLibrary.EmailService.Services
             var mailMessage = GenerateMailMessage(emailTo, "ԵԻՊՔ Գրադարան - Փոխել գաղտնաբառը");
             mailMessage.Body = $"Գաղտնաբառը փոխելու համար անցեք հետևյալ հղումով\n" +
                 $"http://notreadyyet.com/idk/{token}";
+
+            //TODO: mi ban en chi
             mailMessage.IsBodyHtml = false;
             return mailMessage;
         }
