@@ -45,19 +45,29 @@ namespace EipqLibrary.EmailService.Services
             return mailMessage;
         }
 
-        private MailMessage GenerateMailMessage(string emailTo, string subject)
-        {
-            var mailMessage = new MailMessage { Sender = SenderEmailAddress, From = SenderEmailAddress };
-            mailMessage.To.Add(emailTo);
-            mailMessage.Subject = subject;
-            return mailMessage;
-        }
-
         public MailMessage GenerateAdminRegistrationMailMessage(string emailTo, string userPassword)
         {
             var mailMessage = GenerateMailMessage(emailTo, "ԵԻՊՔ Գրադարան - Ձեր նոր հաշվի տվյալները");
             mailMessage.Body = $"Բարի գալուստ ԵԻՊՔ Գրադարան! <br> Օգտագործեք հետևյալ գաղտնաբառը ձեր հաշիվ մուտք գործելու համար: <b>{userPassword}</b>";
             mailMessage.IsBodyHtml = true;
+            return mailMessage;
+        }
+
+        public MailMessage GenerateResetPasswordMailMessage(string emailTo, string token)
+        {
+            var mailMessage = GenerateMailMessage(emailTo, "ԵԻՊՔ Գրադարան - Փոխել գաղտնաբառը");
+            mailMessage.Body = $"Գաղտնաբառը փոխելու համար անցեք հետևյալ հղումով\n" +
+                $"http://notreadyyet.com/idk/{token}";
+            mailMessage.IsBodyHtml = false;
+            return mailMessage;
+        }
+
+        // Private methods
+        private MailMessage GenerateMailMessage(string emailTo, string subject)
+        {
+            var mailMessage = new MailMessage { Sender = SenderEmailAddress, From = SenderEmailAddress };
+            mailMessage.To.Add(emailTo);
+            mailMessage.Subject = subject;
             return mailMessage;
         }
 
