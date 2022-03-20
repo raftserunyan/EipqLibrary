@@ -1,3 +1,5 @@
+using EipqLibrary.Admin.Extensions;
+using EipqLibrary.Admin.Security;
 using EipqLibrary.Domain.Core.DomainModels;
 using EipqLibrary.EmailService.Extensions;
 using EipqLibrary.EmailService.Models;
@@ -61,7 +63,9 @@ namespace EipqLibrary.Admin
                 options.UseSqlServer(Configuration.GetConnectionString("EipqLibraryConnectionString")));
 
             services.AddIdentity<AdminUser, IdentityRole>(o => o.User.RequireUniqueEmail = true)
-                .AddEntityFrameworkStores<EipqLibraryDbContext>();
+                .AddEntityFrameworkStores<EipqLibraryDbContext>()
+                .AddTokenProvider<EmailConfirmationTokenProvider<AdminUser>>("emailconfirmation")
+                 .AddTokenProvider<ResetTokenProvider<AdminUser>>("resetpassword");
                 
             services.Configure<IdentityOptions>(options =>
             {
@@ -116,7 +120,10 @@ namespace EipqLibrary.Admin
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseDeveloperExceptionPage();
+            //app.UseDeveloperExceptionPage();
+            app.UseExceptionHandler("/error");
+            app.UseExceptionHandling();
+
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "EipqLibrary.Admin v1"));
 
