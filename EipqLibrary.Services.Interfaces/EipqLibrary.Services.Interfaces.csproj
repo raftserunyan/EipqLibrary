@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EipqLibrary.Services.DTOs\EipqLibrary.Services.DTOs.csproj" />
-    <ProjectReference Include="..\EipqLibrary.Shared\EipqLibrary.Shared.csproj" />
   </ItemGroup>
 
 </Project>
