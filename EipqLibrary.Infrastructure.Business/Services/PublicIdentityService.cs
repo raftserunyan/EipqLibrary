@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
+using EipqLibrary.Domain.Core.Constants.Claims;
 using EipqLibrary.Domain.Core.DomainModels;
 using EipqLibrary.Domain.Core.Enums;
 using EipqLibrary.Domain.Interfaces.EFInterfaces;
+using EipqLibrary.EmailService.Interfaces;
+using EipqLibrary.Services.DTOs.Authentication;
 using EipqLibrary.Services.DTOs.Models;
 using EipqLibrary.Services.DTOs.Models.Tokens;
 using EipqLibrary.Services.DTOs.RequestModels;
@@ -12,7 +15,9 @@ using EipqLibrary.Shared.Web.Dtos.Tokens;
 using EipqLibrary.Shared.Web.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using System;
+using System.Linq;
 using System.Security.Authentication;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace EipqLibrary.Infrastructure.Business.Services
@@ -25,12 +30,14 @@ namespace EipqLibrary.Infrastructure.Business.Services
         private readonly IGroupService _groupService;
         private readonly ITokenService _tokenService;
         private readonly IPublicRefreshTokenService _refreshTokenService;
+        private readonly IEmailService _emailService;
 
         public PublicIdentityService(UserManager<User> userManager,
                                      IMapper mapper, 
                                      IUnitOfWork unitOfWork,
                                      IGroupService groupService,
                                      ITokenService tokenService,
+                                     IEmailService emailService,
                                      IPublicRefreshTokenService refreshTokenService)
         {
             _userManager = userManager;
@@ -38,6 +45,7 @@ namespace EipqLibrary.Infrastructure.Business.Services
             _unitOfWork = unitOfWork;
             _groupService = groupService;
             _tokenService = tokenService;
+            _emailService = emailService;
             _refreshTokenService = refreshTokenService;
         }
 
@@ -103,6 +111,107 @@ namespace EipqLibrary.Infrastructure.Business.Services
             return authResponse;
         }
 
+        public async Task<IdentityResult> ChangePassword(ChangePasswordRequest request)
+        {
+            var user = await _userManager.FindByEmailAsync(request.Email);
+            if (user is null)
+            {
+                throw GetInvalidCredentialsException();
+            }
+
+            if (!_userManager.CheckPasswordAsync(user, request.Password).Result)
+            {
+                throw IncorrectPWD();
+            }
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            return await _userManager.ResetPasswordAsync(user, token, request.NewPassword);
+        }
+
+        public async Task<AuthenticationResponse> RefreshToken(RefreshTokenRequest request)
+        {
+            if (!_tokenService.TryGetPrincipalFromToken(request.Token, out var principal))
+            {
+                throw GetInvalidTokenException();
+            }
+
+            var userId = _tokenService.GetUserId(principal);
+            var jti = _tokenService.GetTokenJti(principal);
+            var deviceId = _tokenService.GetDeviceId(principal);
+
+            if (!await _refreshTokenService.ExistsUnexpiredForTokenAndDevice(request.RefreshToken, jti, deviceId))
+            {
+                throw GetInvalidTokenException();
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+
+            var refreshTokenDto = new PublicRefreshTokenDto
+            {
+                OldAccessTokenId = jti,
+                DeviceId = deviceId,
+                OldRefreshToken = request.RefreshToken,
+                UserId = userId
+            };
+
+            var tokenProvider = GetTokenProvider(principal);
+
+            return await CreateTokenAndRefreshToken(user, refreshTokenDto, tokenProvider);
+        }
+
+        public async Task Logout()
+        {
+            await _refreshTokenService.RemoveForDevice(_tokenService.CurrentTokenJti, _tokenService.CurrentDeviceId);
+        }
+
+        public async Task ResetPasswordToken(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                throw InvalidEmail();
+            }
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var message = _emailService.GenerateResetPasswordMailMessage(user.Email, token);
+            await _emailService.SendEmailMessageAsync(message);
+        }
+
+        public async Task<string> CheckTokenValidity(TokenValidation resetTokenValidation)
+        {
+            var user = await _userManager.FindByEmailAsync(resetTokenValidation.Email);
+            if (user == null)
+            {
+                throw InvalidEmail();
+            }
+
+            if (await _userManager.VerifyUserTokenAsync(user, "Default", "ResetPassword", resetTokenValidation.Token) is true)
+            {
+                return user.Email;
+            }
+
+            throw GetInvalidTokenException();
+        }
+
+        public async Task<IdentityResult> ResetPassword(ResetPasswordRequest request)
+        {
+            var user = await _userManager.FindByEmailAsync(request.Email);
+            if (user is null)
+            {
+                InvalidEmail();
+            }
+
+            var result = await _userManager.ResetPasswordAsync(user, request.Token, request.NewPassword);
+            if (!result.Succeeded)
+            {
+                throw GetInvalidTokenException();
+            }
+
+            return result;
+        }
+
+
+        // Private methods
         private async Task<User> CreateUser(UserCreationDto userCreationDto)
         {
             var newUser = _mapper.Map<User>(userCreationDto);
@@ -158,6 +267,12 @@ namespace EipqLibrary.Infrastructure.Business.Services
 
             return false;
         }
+        private string GetTokenProvider(ClaimsPrincipal principal)
+        {
+            return principal.Claims.Any(c => c.Type.ToLower().Equals(CustomClaimNames.Provider))
+                ? principal.Claims.First(c => c.Type.ToLower().Equals(CustomClaimNames.Provider)).Value
+                : null;
+        }
 
         private Exception GetInvalidUserStatus(UserStatus status)
         {
@@ -179,5 +294,8 @@ namespace EipqLibrary.Infrastructure.Business.Services
         {
             return new BadDataException("Մուտքագրված մուտքանունը և/կամ ծածկագիրը սխալ է");
         }
+        private Exception GetInvalidTokenException() => new AuthenticationException("Invalid-token");
+        private Exception IncorrectPWD() => new BadDataException("Ընթացիկ գաղտնաբառը սխալ է");
+        private Exception InvalidEmail() => new BadDataException("Էլ․ հասցեն սխալ է");
     }
 }

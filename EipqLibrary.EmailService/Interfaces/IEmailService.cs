@@ -5,9 +5,10 @@ namespace EipqLibrary.EmailService.Interfaces
 {
     public interface IEmailService
     {
-        public MailMessage GenerateAdminRegistrationMailMessage(string emailTo, string userPassword);
-        public MailMessage GenerateRegistrationDeniedMailMessage(string emailTo, string additionalMessage = null);
-        public MailMessage GenerateRegistrationConfirmedMailMessage(string emailTo);
-        public Task SendEmailMessageAsync(MailMessage message);
+        MailMessage GenerateAdminRegistrationMailMessage(string emailTo, string userPassword);
+        MailMessage GenerateRegistrationDeniedMailMessage(string emailTo, string additionalMessage = null);
+        MailMessage GenerateRegistrationConfirmedMailMessage(string emailTo);
+        MailMessage GenerateResetPasswordMailMessage(string emailTo, string token);
+        Task SendEmailMessageAsync(MailMessage message);
     }
 }

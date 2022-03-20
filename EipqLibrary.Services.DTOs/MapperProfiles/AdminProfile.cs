@@ -16,7 +16,7 @@ namespace EipqLibrary.Services.DTOs.MapperProfiles
             CreateMap<AdminChangeStatusRequest, AdminChangeStatusDto>().ReverseMap();
 
             CreateMap<AdminUser, AdminInfo>()
-                .ForMember(x => x.Name, opts => opts.MapFrom(a => a.FirstName + a.LastName));
+                .ForMember(x => x.Name, opts => opts.MapFrom(a => a.FirstName + " " + a.LastName));
         }
     }
 }

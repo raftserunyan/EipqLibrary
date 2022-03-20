@@ -7,6 +7,8 @@ using EipqLibrary.Services.DTOs.MapperProfiles;
 using EipqLibrary.Services.Interfaces.ServiceInterfaces;
 using EipqLibrary.Shared.SharedSettings;
 using EipqLibrary.Shared.SharedSettings.Interfaces;
+using EipqLibrary.Shared.Web.Services;
+using EipqLibrary.Shared.Web.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -100,7 +102,9 @@ namespace EipqLibrary.Admin
             services.AddScoped<IAdminIdentityService, AdminIdentityService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAdminIdentityService, AdminIdentityService>();
+            services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IAdminRefreshTokenService, AdminRefreshTokenService>();
+            services.AddScoped<ITokenService, TokenService>();
 
             // Email Service
             services.AddEmailService();
