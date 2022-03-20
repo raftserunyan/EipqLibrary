@@ -19,6 +19,107 @@ namespace EipqLibrary.Infrastructure.Data.Migrations
                 .HasAnnotation("ProductVersion", "5.0.14")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("EipqLibrary.Domain.Core.DomainModels.AdminRefreshToken", b =>
+                {
+                    b.Property<string>("Token")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeviceId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Token");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AdminRefreshTokens");
+                });
+
+            modelBuilder.Entity("EipqLibrary.Domain.Core.DomainModels.AdminUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<int>("Occupation")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers");
+                });
+
             modelBuilder.Entity("EipqLibrary.Domain.Core.DomainModels.Book", b =>
                 {
                     b.Property<int>("Id")
@@ -72,6 +173,80 @@ namespace EipqLibrary.Infrastructure.Data.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("EipqLibrary.Domain.Core.DomainModels.Group", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("GraduationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Number")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProfessionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProfessionId");
+
+                    b.ToTable("Groups");
+                });
+
+            modelBuilder.Entity("EipqLibrary.Domain.Core.DomainModels.Profession", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime?>("DeletionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Professions");
+                });
+
+            modelBuilder.Entity("EipqLibrary.Domain.Core.DomainModels.PublicRefreshToken", b =>
+                {
+                    b.Property<string>("Token")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AccessTokenId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeviceId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Token");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("PublicRefreshTokens");
+                });
+
             modelBuilder.Entity("EipqLibrary.Domain.Core.DomainModels.User", b =>
                 {
                     b.Property<string>("Id")
@@ -81,12 +256,10 @@ namespace EipqLibrary.Infrastructure.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
@@ -94,11 +267,8 @@ namespace EipqLibrary.Infrastructure.Data.Migrations
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("GroupCreationYear")
+                    b.Property<int>("GroupId")
                         .HasColumnType("int");
-
-                    b.Property<string>("GroupNumber")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
@@ -110,12 +280,10 @@ namespace EipqLibrary.Infrastructure.Data.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
@@ -125,6 +293,9 @@ namespace EipqLibrary.Infrastructure.Data.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<DateTime>("RegistrationDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -139,20 +310,13 @@ namespace EipqLibrary.Infrastructure.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
+                    b.HasIndex("GroupId");
 
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.ToTable("AspNetUsers");
+                    b.ToTable("Students");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -286,6 +450,15 @@ namespace EipqLibrary.Infrastructure.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("EipqLibrary.Domain.Core.DomainModels.AdminRefreshToken", b =>
+                {
+                    b.HasOne("EipqLibrary.Domain.Core.DomainModels.AdminUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("EipqLibrary.Domain.Core.DomainModels.Book", b =>
                 {
                     b.HasOne("EipqLibrary.Domain.Core.DomainModels.Category", "Category")
@@ -295,6 +468,37 @@ namespace EipqLibrary.Infrastructure.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("EipqLibrary.Domain.Core.DomainModels.Group", b =>
+                {
+                    b.HasOne("EipqLibrary.Domain.Core.DomainModels.Profession", "Profession")
+                        .WithMany("Groups")
+                        .HasForeignKey("ProfessionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Profession");
+                });
+
+            modelBuilder.Entity("EipqLibrary.Domain.Core.DomainModels.PublicRefreshToken", b =>
+                {
+                    b.HasOne("EipqLibrary.Domain.Core.DomainModels.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("EipqLibrary.Domain.Core.DomainModels.User", b =>
+                {
+                    b.HasOne("EipqLibrary.Domain.Core.DomainModels.Group", "Group")
+                        .WithMany("Students")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Group");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -308,7 +512,7 @@ namespace EipqLibrary.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("EipqLibrary.Domain.Core.DomainModels.User", null)
+                    b.HasOne("EipqLibrary.Domain.Core.DomainModels.AdminUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -317,7 +521,7 @@ namespace EipqLibrary.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("EipqLibrary.Domain.Core.DomainModels.User", null)
+                    b.HasOne("EipqLibrary.Domain.Core.DomainModels.AdminUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -332,7 +536,7 @@ namespace EipqLibrary.Infrastructure.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EipqLibrary.Domain.Core.DomainModels.User", null)
+                    b.HasOne("EipqLibrary.Domain.Core.DomainModels.AdminUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -341,7 +545,7 @@ namespace EipqLibrary.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("EipqLibrary.Domain.Core.DomainModels.User", null)
+                    b.HasOne("EipqLibrary.Domain.Core.DomainModels.AdminUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -351,6 +555,16 @@ namespace EipqLibrary.Infrastructure.Data.Migrations
             modelBuilder.Entity("EipqLibrary.Domain.Core.DomainModels.Category", b =>
                 {
                     b.Navigation("Books");
+                });
+
+            modelBuilder.Entity("EipqLibrary.Domain.Core.DomainModels.Group", b =>
+                {
+                    b.Navigation("Students");
+                });
+
+            modelBuilder.Entity("EipqLibrary.Domain.Core.DomainModels.Profession", b =>
+                {
+                    b.Navigation("Groups");
                 });
 #pragma warning restore 612, 618
         }

@@ -10,6 +10,11 @@ namespace EipqLibrary.Infrastructure.Data
         {
             services.AddScoped<IBookRepository, BookRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IPublicRefreshTokenRepository, PublicRefreshTokenRepository>();
+            services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+            services.AddScoped<IGroupRepository, GroupRepository>();
+            services.AddScoped<IProfessionRepository, ProfessionRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             return services;
         }
