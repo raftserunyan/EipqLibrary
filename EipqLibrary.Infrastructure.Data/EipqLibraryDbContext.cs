@@ -11,6 +11,7 @@ namespace EipqLibrary.Infrastructure.Data
         }
 
         public DbSet<Book> Books { get; set; }
+        public DbSet<BookCreationRequest> BookCreationRequests { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<Profession> Professions { get; set; }

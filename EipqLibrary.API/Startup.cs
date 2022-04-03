@@ -112,6 +112,7 @@ namespace EipqLibrary.API
             services.AddScoped<ICurrentUserService>(x => x.GetRequiredService<TokenService>());
             services.AddScoped<IGroupService, GroupService>();
             services.AddScoped<IProfessionService, ProfessionService>();
+            services.AddScoped<IBookCreationRequestService, BookCreationRequestService>();
 
             // Email Service
             services.AddEmailService();

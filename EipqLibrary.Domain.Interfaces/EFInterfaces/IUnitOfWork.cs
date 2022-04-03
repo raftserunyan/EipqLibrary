@@ -7,6 +7,8 @@ namespace EipqLibrary.Domain.Interfaces.EFInterfaces
     {
         public IBookRepository BookRepository { get; }
         public ICategoryRepository CategoryRepository { get; }
+        public IBookCreationRequestRepository BookCreationRequestRepository { get; }
+
         public Task SaveChangesAsync();
     }
 }

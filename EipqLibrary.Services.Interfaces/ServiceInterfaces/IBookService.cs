@@ -9,6 +9,6 @@ namespace EipqLibrary.Services.Interfaces.ServiceInterfaces
     {
         public Task<List<BookModel>> GetAllAsync();
         public Task<BookModel> GetByIdAsync(int bookId);
-        public Task<int> CreateBook(BookCreationRequest bookCreationRequest);
+        //public Task<int> CreateBook(BookCreationRequest bookCreationRequest);
     }
 }

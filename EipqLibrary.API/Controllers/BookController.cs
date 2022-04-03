@@ -33,12 +33,12 @@ namespace EipqLibrary.API.Controllers
             return Ok(await _bookService.GetByIdAsync(bookId));
         }
 
-        [HttpPost]
-        [ProducesResponseType((int)HttpStatusCode.Created)]
-        public async Task<IActionResult> Post([FromBody] BookCreationRequest bookCreationRequest)
-        {
-            int entityId = await _bookService.CreateBook(bookCreationRequest);
-            return CreatedAtAction(nameof(GetById), new { bookId = entityId }, new { bookId = entityId });
-        }
+        //[HttpPost]
+        //[ProducesResponseType((int)HttpStatusCode.Created)]
+        //public async Task<IActionResult> Post([FromBody] BookAdditionRequest bookCreationRequest)
+        //{
+        //    int entityId = await _bookService.CreateBook(bookCreationRequest);
+        //    return CreatedAtAction(nameof(GetById), new { bookId = entityId }, new { bookId = entityId });
+        //}
     }
 }

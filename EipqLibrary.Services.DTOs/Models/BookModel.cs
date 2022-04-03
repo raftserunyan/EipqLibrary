@@ -10,7 +10,7 @@ namespace EipqLibrary.Services.DTOs.Models
         public int ProductionYear { get; set; }
         public int PagesCount { get; set; }
         public int TotalCount { get; set; }
-        public string Status { get; set; }
+        public string BookAvailability { get; set; }
         public string DeletionReason { get; set; }
 
         public CategoryModel Category { get; set; }

@@ -4,9 +4,9 @@ using EipqLibrary.Infrastructure.Data.Repositories.Common;
 
 namespace EipqLibrary.Infrastructure.Data.Repositories
 {
-    public class BookRepository : BaseRepository<Book>, IBookRepository
+    public class BookCreationRequestRepository : BaseRepository<BookCreationRequest>, IBookCreationRequestRepository
     {
-        public BookRepository(EipqLibraryDbContext context) : base(context)
+        public BookCreationRequestRepository(EipqLibraryDbContext context) : base(context)
         {
         }
     }
