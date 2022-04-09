@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EipqLibrary.Domain.Core.AggregatedEntities;
 using EipqLibrary.Domain.Core.DomainModels;
 using EipqLibrary.Services.DTOs.Models;
 using EipqLibrary.Services.DTOs.RequestModels;
@@ -11,6 +12,7 @@ namespace EipqLibrary.Services.DTOs.MapperProfiles
         {
             CreateMap<BookAdditionRequest, BookCreationRequest>();
             CreateMap<BookCreationRequest, BookCreationRequestModel>();
+            CreateMap<PagedData<BookCreationRequest>, PagedData<BookCreationRequestModel>>();
             CreateMap<UpdateBookCreationRequest, BookCreationRequest>();
             CreateMap<BookCreationRequest, Book>()
                 .ForMember(x => x.Id, opts => opts.Ignore());

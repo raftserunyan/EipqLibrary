@@ -1,4 +1,4 @@
-﻿using EipqLibrary.Domain.Core.Enums;
+﻿using EipqLibrary.Domain.Core.Enums;    
 
 namespace EipqLibrary.Domain.Core.AggregatedEntities
 {

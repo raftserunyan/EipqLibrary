@@ -11,13 +11,13 @@ namespace EipqLibrary.Infrastructure.Data.Utils.Extensions
 {
     public static class QueryableExtensions
     {
-        public static IOrderedQueryable<T> OrderByFieldName<T>(this IEnumerable<T> source,
+        public static IOrderedQueryable<T> OrderByFieldName<T>(this IQueryable<T> source,
             string property)
         {
             return ApplyOrder(source.AsQueryable(), property, "OrderBy");
         }
 
-        public static IOrderedQueryable<T> OrderByFieldNameDescending<T>(this IEnumerable<T> source,
+        public static IOrderedQueryable<T> OrderByFieldNameDescending<T>(this IQueryable<T> source,
             string property)
         {
             return ApplyOrder(source.AsQueryable(), property, "OrderByDescending");

@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
+using EipqLibrary.Domain.Core.AggregatedEntities;
 using EipqLibrary.Domain.Core.DomainModels;
+using EipqLibrary.Domain.Core.Enums;
 using EipqLibrary.Domain.Interfaces.EFInterfaces;
 using EipqLibrary.Services.DTOs.Models;
 using EipqLibrary.Services.DTOs.RequestModels;
 using EipqLibrary.Services.Interfaces.ServiceInterfaces;
-using EipqLibrary.Shared.CustomExceptions;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -98,11 +99,11 @@ namespace EipqLibrary.Infrastructure.Business.Services
             await _uow.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<BookCreationRequestModel>> GetAllAsync()
+        public async Task<PagedData<BookCreationRequestModel>> GetAllAsync(PageInfo pageInfo, BCRSortOption bcrSort, BookCreationRequestStatus? status)
         {
-            var requests = await _uow.BookCreationRequestRepository.GetAllWithIncludeAsync(x => x.Category);
+            var requests = await _uow.BookCreationRequestRepository.GetAllSortedAndPagedAsync(pageInfo, bcrSort, status);
 
-            return _mapper.Map<IEnumerable<BookCreationRequestModel>>(requests);
+            return _mapper.Map<PagedData<BookCreationRequestModel>>(requests);
         }
 
         public async Task<BookCreationRequestModel> GetByIdAsync(int id)

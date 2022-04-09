@@ -1,4 +1,6 @@
-﻿using EipqLibrary.Services.DTOs.Models;
+﻿using EipqLibrary.Domain.Core.AggregatedEntities;
+using EipqLibrary.Domain.Core.Enums;
+using EipqLibrary.Services.DTOs.Models;
 using EipqLibrary.Services.DTOs.RequestModels;
 using EipqLibrary.Services.Interfaces.ServiceInterfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -72,10 +74,10 @@ namespace EipqLibrary.Admin.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<BookCreationRequestModel>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetAll()
+        [ProducesResponseType(typeof(PagedData<BookCreationRequestModel>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetAll([FromQuery] PageInfo pageInfo, [FromQuery] BCRSortOption sort, [FromQuery] BookCreationRequestStatus? status)
         {
-            var requests = await _bookCreationRequestService.GetAllAsync();
+            var requests = await _bookCreationRequestService.GetAllAsync(pageInfo, sort, status);
             return Ok(requests);
         }
 
