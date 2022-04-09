@@ -27,13 +27,13 @@ namespace EipqLibrary.Admin.Controllers
             return Ok();
         }
 
-        [HttpDelete("{bookId}")]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<IActionResult> Delete(int bookId)
-        {
-            await _bookService.DeleteAsync(bookId);
+        //[HttpDelete("{bookId}")]
+        //[ProducesResponseType((int)HttpStatusCode.OK)]
+        //public async Task<IActionResult> Delete(int bookId)
+        //{
+        //    await _bookService.DeleteAsync(bookId);
 
-            return Ok();
-        }
+        //    return Ok();
+        //}
     }
 }

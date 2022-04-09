@@ -49,9 +49,18 @@ namespace EipqLibrary.Infrastructure.Business.Services
 
         public async Task<BookModel> UpdateAsync(BookUpdateRequest updateRequest)
         {
+            if (!await _unitOfWork.CategoryRepository.ExistsAsync(x => x.Id == updateRequest.CategoryId))
+            {
+                throw BadRequest($"Category with ID {updateRequest.CategoryId} does not exist");
+            }
+
             var existingBook = await _unitOfWork.BookRepository.GetByIdAsync(updateRequest.Id);
             EnsureExists(existingBook, $"Book with id {updateRequest.Id} does not exist");
 
+            if (existingBook.TotalCount != updateRequest.Quantity)
+            {
+                throw BadRequest("You cannot change the total quantity of a book");
+            }
             _mapper.Map(updateRequest, existingBook);
             await _unitOfWork.SaveChangesAsync();
 

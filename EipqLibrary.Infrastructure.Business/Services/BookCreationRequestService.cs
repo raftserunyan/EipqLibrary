@@ -46,6 +46,11 @@ namespace EipqLibrary.Infrastructure.Business.Services
                 }
                 else
                 {
+                    book.ProductionYear = request.ProductionYear;
+                    book.Description = request.Description;
+                    book.PagesCount = request.PagesCount;
+                    book.PagesCount = request.PagesCount;
+
                     book.TotalCount += request.Quantity;
                     book.AvailableForBorrowingCount += request.AvailableForBorrowingCount;
                     book.AvailableForUsingInLibraryCount += request.AvailableForUsingInLibraryCount;

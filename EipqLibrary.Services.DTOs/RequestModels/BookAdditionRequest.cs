@@ -15,7 +15,7 @@ namespace EipqLibrary.Services.DTOs.RequestModels
         public int ProductionYear { get; set; }
         public string Description { get; set; }
 
-        [Range(0, int.MaxValue)]
+        [Range(5, int.MaxValue)]
         public int? PagesCount { get; set; }
 
         [Required]
