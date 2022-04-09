@@ -11,6 +11,7 @@ namespace EipqLibrary.Services.DTOs.MapperProfiles
         {
             CreateMap<Category, CategoryModel>().ReverseMap();
             CreateMap<Category, CategoryCreationRequest>().ReverseMap();
+            CreateMap<CategoryUpdateRequest, Category>();
         }
     }
 }

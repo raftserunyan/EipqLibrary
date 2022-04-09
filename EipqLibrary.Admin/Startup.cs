@@ -42,6 +42,13 @@ namespace EipqLibrary.Admin
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
+
             services.AddSingleton<IAppConfig>(AppConfig);
             services.AddSingleton(AppConfig.JwtSettings);
 
@@ -109,6 +116,9 @@ namespace EipqLibrary.Admin
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IAdminRefreshTokenService, AdminRefreshTokenService>();
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IBookCreationRequestService, BookCreationRequestService>();
+            services.AddScoped<IBookService, BookService>();
+            services.AddScoped<ICategoryService, CategoryService>();
 
             // Email Service
             services.AddEmailService();
@@ -120,7 +130,7 @@ namespace EipqLibrary.Admin
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            //app.UseDeveloperExceptionPage();
+            app.UseCors("MyPolicy");
             app.UseExceptionHandler("/error");
             app.UseExceptionHandling();
 

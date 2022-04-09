@@ -76,7 +76,7 @@ namespace EipqLibrary.Admin.Controllers
         public async Task<IActionResult> DeleteUserAccount(DeleteUserRequest deleteRequest)
         {
             var deletedUser = await _userService.DeleteUserAccount(deleteRequest.UserId);
-            var emailMessage = _emailService.GenerateRegistrationDeniedMailMessage(deletedUser.Email, deleteRequest.MessageToUser);
+            var emailMessage = _emailService.GenerateAccountWasDeletedMailMessage(deletedUser.Email, deleteRequest.MessageToUser);
             await _emailService.SendEmailMessageAsync(emailMessage);
 
             return NoContent();

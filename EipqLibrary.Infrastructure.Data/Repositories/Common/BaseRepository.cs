@@ -1,5 +1,6 @@
 ﻿using EipqLibrary.Domain.Core.DomainModels.Common;
 using EipqLibrary.Domain.Interfaces.EFInterfaces.Common;
+using EipqLibrary.Shared.CustomExceptions;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,21 @@ namespace EipqLibrary.Infrastructure.Data.Repositories.Common
         public async Task AddAsync(T entity)
         {
             await _context.AddAsync(entity);
+        }
+
+        public void Delete(T entity)
+        {
+            _context.Set<T>().Remove(entity);
+        }
+        public async Task DeleteAsync(int id)
+        {
+            var entity = await _context.Set<T>().FirstOrDefaultAsync(x => x.Id == id);
+            if (entity == null)
+            {
+                throw new BadDataException($"Entity with id {id} was not found");
+            }
+
+            _context.Set<T>().Remove(entity);
         }
 
         public async Task<bool> ExistsAsync(Expression<Func<T, bool>> predicate)

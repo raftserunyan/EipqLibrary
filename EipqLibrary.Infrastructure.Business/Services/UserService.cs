@@ -43,6 +43,7 @@ namespace EipqLibrary.Infrastructure.Business.Services
             EnsureExists(user);
 
             _userRepository.Delete(user);
+            await _unitOfWork.SaveChangesAsync();
 
             return user;
         }

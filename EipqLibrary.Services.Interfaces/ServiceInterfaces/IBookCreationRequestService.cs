@@ -8,7 +8,10 @@ namespace EipqLibrary.Services.Interfaces.ServiceInterfaces
     public interface IBookCreationRequestService
     {
         Task<int> CreateBookAdditionRequestAsync(BookAdditionRequest bookAdditionRequest);
+        Task AddAccountantAction(BookCreationRequestAccountantAction accountantAction);
+        Task<BookCreationRequestModel> UpdateAsync(UpdateBookCreationRequest updateRequest);
         Task<IEnumerable<BookCreationRequestModel>> GetAllAsync();
         Task<BookCreationRequestModel> GetByIdAsync(int id);
+        Task DeleteAsync(int id);
     }
 }

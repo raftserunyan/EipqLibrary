@@ -73,6 +73,15 @@ namespace EipqLibrary.EmailService.Services
             return mailMessage;
         }
 
+        public MailMessage GenerateAccountWasDeletedMailMessage(string emailTo, string additionalMessage = null)
+        {
+            var mailMessage = GenerateMailMessage(emailTo, "ԵԻՊՔ Գրադարան - Ձեր հաշիվը ջնջվել է");
+            mailMessage.Body = $"Ձեր հաշիվը քոլեջի գրադարանի կայքում ջնջվել է!\n";
+            mailMessage.Body += additionalMessage;
+            mailMessage.IsBodyHtml = false;
+            return mailMessage;
+        }
+
         private MailAddress SenderEmailAddress => new MailAddress(_emailSettings.Mail, _emailSettings.DisplayName);
     }
 }

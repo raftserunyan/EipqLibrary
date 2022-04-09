@@ -130,7 +130,10 @@ namespace EipqLibrary.Infrastructure.Data.Migrations
                     b.Property<string>("Author")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Availability")
+                    b.Property<int>("AvailableForBorrowingCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AvailableForUsingInLibraryCount")
                         .HasColumnType("int");
 
                     b.Property<int>("CategoryId")
@@ -138,6 +141,9 @@ namespace EipqLibrary.Infrastructure.Data.Migrations
 
                     b.Property<int?>("DeletionReason")
                         .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -165,13 +171,19 @@ namespace EipqLibrary.Infrastructure.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<DateTime?>("AccountantActionDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("AccountantNote")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Author")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("BookAvailability")
+                    b.Property<int>("AvailableForBorrowingCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AvailableForUsingInLibraryCount")
                         .HasColumnType("int");
 
                     b.Property<int>("CategoryId")
@@ -194,6 +206,12 @@ namespace EipqLibrary.Infrastructure.Data.Migrations
 
                     b.Property<DateTime>("RequestCreationDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("RequestLastUpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("RequestStatus")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

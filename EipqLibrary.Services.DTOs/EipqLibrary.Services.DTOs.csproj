@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EipqLibrary.Domain.Core\EipqLibrary.Domain.Core.csproj" />
+    <ProjectReference Include="..\EipqLibrary.Shared\EipqLibrary.Shared.csproj" />
   </ItemGroup>
 
 </Project>

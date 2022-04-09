@@ -42,6 +42,13 @@ namespace EipqLibrary.API
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
+
             services.AddSingleton<IAppConfig>(AppConfig);
             services.AddSingleton(AppConfig.JwtSettings);
 
@@ -124,7 +131,7 @@ namespace EipqLibrary.API
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            //app.UseDeveloperExceptionPage();
+            app.UseCors("MyPolicy");
             app.UseExceptionHandler("/error");
             app.UseExceptionHandling();
             app.UseSwagger();

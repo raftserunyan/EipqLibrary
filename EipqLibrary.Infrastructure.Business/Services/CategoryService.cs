@@ -5,13 +5,12 @@ using EipqLibrary.Services.DTOs.Models;
 using EipqLibrary.Services.DTOs.RequestModels;
 using EipqLibrary.Services.Interfaces.ServiceInterfaces;
 using EipqLibrary.Shared.CustomExceptions;
-using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace EipqLibrary.Infrastructure.Business.Services
 {
-    public class CategoryService : ICategoryService
+    public class CategoryService : BaseService, ICategoryService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -38,6 +37,12 @@ namespace EipqLibrary.Infrastructure.Business.Services
             return category.Id;
         }
 
+        public async Task DeleteAsync(int categoryId)
+        {
+            await _unitOfWork.CategoryRepository.DeleteAsync(categoryId);
+            await _unitOfWork.SaveChangesAsync();
+        }
+
         public async Task<List<CategoryModel>> GetAllAsync()
         {
             var categories =  await _unitOfWork.CategoryRepository.GetAllAsync();
@@ -48,6 +53,17 @@ namespace EipqLibrary.Infrastructure.Business.Services
         public async Task<CategoryModel> GetByIdAsync(int categoryId)
         {
             var category = await _unitOfWork.CategoryRepository.GetByIdAsync(categoryId);
+
+            return _mapper.Map<CategoryModel>(category);
+        }
+
+        public async Task<CategoryModel> UpdateAsync(CategoryUpdateRequest updateRequest)
+        {
+            var category = await _unitOfWork.CategoryRepository.GetByIdAsync(updateRequest.Id);
+            EnsureExists(category, $"Category with ID {updateRequest.Id} does not exist");
+
+            _mapper.Map(updateRequest, category);
+            await _unitOfWork.SaveChangesAsync();
 
             return _mapper.Map<CategoryModel>(category);
         }

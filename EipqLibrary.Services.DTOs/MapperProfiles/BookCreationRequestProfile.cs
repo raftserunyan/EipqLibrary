@@ -11,6 +11,9 @@ namespace EipqLibrary.Services.DTOs.MapperProfiles
         {
             CreateMap<BookAdditionRequest, BookCreationRequest>();
             CreateMap<BookCreationRequest, BookCreationRequestModel>();
+            CreateMap<UpdateBookCreationRequest, BookCreationRequest>();
+            CreateMap<BookCreationRequest, Book>()
+                .ForMember(x => x.Id, opts => opts.Ignore());
         }
     }
 }

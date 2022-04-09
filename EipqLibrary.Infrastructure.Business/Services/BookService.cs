@@ -1,13 +1,14 @@
 ﻿using AutoMapper;
 using EipqLibrary.Domain.Interfaces.EFInterfaces;
 using EipqLibrary.Services.DTOs.Models;
+using EipqLibrary.Services.DTOs.RequestModels;
 using EipqLibrary.Services.Interfaces.ServiceInterfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace EipqLibrary.Infrastructure.Business.Services
 {
-    public class BookService : IBookService
+    public class BookService : BaseService, IBookService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -18,23 +19,11 @@ namespace EipqLibrary.Infrastructure.Business.Services
             _mapper = mapper;
         }
 
-        //public async Task<int> CreateBook(BookCreationRequest bookCreationRequest)
-        //{
-        //    var book = await _unitOfWork.BookRepository.GetFirstWithIncludeAsync(b => b.Name == bookCreationRequest.Name && b.Author == bookCreationRequest.Author);
-        //    if (book == null)
-        //    {
-        //        book = _mapper.Map<Book>(bookCreationRequest);
-        //        await _unitOfWork.BookRepository.AddAsync(book);
-        //    }
-        //    else
-        //    {
-        //        book.TotalCount += bookCreationRequest.TotalCount;
-        //    }
-
-        //    await _unitOfWork.SaveChangesAsync();
-
-        //    return book.Id;
-        //}
+        public async Task DeleteAsync(int bookId)
+        {
+            await _unitOfWork.BookRepository.DeleteAsync(bookId);
+            await _unitOfWork.SaveChangesAsync();
+        }
 
         public async Task<List<BookModel>> GetAllAsync()
         {
@@ -45,9 +34,28 @@ namespace EipqLibrary.Infrastructure.Business.Services
 
         public async Task<BookModel> GetByIdAsync(int bookId)
         {
-            var books = await _unitOfWork.BookRepository.GetByIdWithIncludeAsync(bookId, x => x.Category);
+            var book = await _unitOfWork.BookRepository.GetByIdWithIncludeAsync(bookId, x => x.Category);
+            EnsureExists(book, $"Book with id {bookId} was not found");
 
-            return _mapper.Map<BookModel>(books);
+            return _mapper.Map<BookModel>(book);
+        }
+
+        public async Task<BookModel> GetByNameAndAuthorAsync(string name, string author)
+        {
+            var book = await _unitOfWork.BookRepository.GetFirstWithIncludeAsync(x => x.Name == name && x.Author == author, x => x.Category);
+
+            return book == null ? null : _mapper.Map<BookModel>(book);
+        }
+
+        public async Task<BookModel> UpdateAsync(BookUpdateRequest updateRequest)
+        {
+            var existingBook = await _unitOfWork.BookRepository.GetByIdAsync(updateRequest.Id);
+            EnsureExists(existingBook, $"Book with id {updateRequest.Id} does not exist");
+
+            _mapper.Map(updateRequest, existingBook);
+            await _unitOfWork.SaveChangesAsync();
+
+            return _mapper.Map<BookModel>(existingBook);
         }
     }
 }

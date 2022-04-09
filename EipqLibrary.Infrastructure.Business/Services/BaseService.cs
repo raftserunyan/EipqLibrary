@@ -11,5 +11,10 @@ namespace EipqLibrary.Infrastructure.Business.Services
                 throw new EntityNotFoundException(message);
             }
         }
+
+        protected BadDataException BadRequest(string message = "Bad Data")
+        {
+            throw new BadDataException(message);
+        }
     }
 }

@@ -22,7 +22,7 @@ using System.Threading.Tasks;
 
 namespace EipqLibrary.Infrastructure.Business.Services
 {
-    public class PublicIdentityService : IPublicIdentityService
+    public class PublicIdentityService : BaseService, IPublicIdentityService
     {
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
@@ -223,8 +223,7 @@ namespace EipqLibrary.Infrastructure.Business.Services
 
             if (!creationResult.Succeeded)
             {
-                throw new BadDataException(creationResult.Errors.ToSelectiveErrorsDictionary(
-                    new[] { nameof(userCreationDto.Email), nameof(userCreationDto.Password) }));
+                throw BadRequest(creationResult.Errors.FirstOrDefault().Code + ": " + creationResult.Errors.FirstOrDefault().Description);
             }
 
             return newUser;
