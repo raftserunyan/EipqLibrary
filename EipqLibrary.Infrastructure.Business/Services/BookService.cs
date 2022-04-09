@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
+using EipqLibrary.Domain.Core.AggregatedEntities;
 using EipqLibrary.Domain.Interfaces.EFInterfaces;
 using EipqLibrary.Services.DTOs.Models;
 using EipqLibrary.Services.DTOs.RequestModels;
 using EipqLibrary.Services.Interfaces.ServiceInterfaces;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace EipqLibrary.Infrastructure.Business.Services
@@ -25,11 +25,11 @@ namespace EipqLibrary.Infrastructure.Business.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task<List<BookModel>> GetAllAsync()
+        public async Task<PagedData<BookModel>> GetAllAsync(PageInfo pageInfo, int? categoryId, string author)
         {
-            var books = await _unitOfWork.BookRepository.GetAllWithIncludeAsync(x => x.Category);
+            var books = await _unitOfWork.BookRepository.GetAllFilteredAndPagedAsync(pageInfo, categoryId, author);
 
-            return _mapper.Map<List<BookModel>>(books);
+            return _mapper.Map<PagedData<BookModel>>(books);
         }
 
         public async Task<BookModel> GetByIdAsync(int bookId)

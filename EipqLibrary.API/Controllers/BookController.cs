@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using EipqLibrary.Domain.Core.AggregatedEntities;
 using EipqLibrary.Services.DTOs.Models;
 using EipqLibrary.Services.DTOs.RequestModels;
 using EipqLibrary.Services.Interfaces.ServiceInterfaces;
@@ -20,10 +21,10 @@ namespace EipqLibrary.API.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(ICollection<BookModel>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetAll()
+        [ProducesResponseType(typeof(PagedData<BookModel>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetAll([FromQuery] PageInfo pageInfo, [FromQuery] int? categoryId, [FromQuery] string author)
         {
-            return Ok(await _bookService.GetAllAsync());
+            return Ok(await _bookService.GetAllAsync(pageInfo, categoryId, author));
         }
 
         [HttpGet("{bookId}")]
