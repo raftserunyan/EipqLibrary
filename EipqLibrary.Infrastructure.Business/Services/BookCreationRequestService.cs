@@ -6,7 +6,6 @@ using EipqLibrary.Domain.Interfaces.EFInterfaces;
 using EipqLibrary.Services.DTOs.Models;
 using EipqLibrary.Services.DTOs.RequestModels;
 using EipqLibrary.Services.Interfaces.ServiceInterfaces;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace EipqLibrary.Infrastructure.Business.Services

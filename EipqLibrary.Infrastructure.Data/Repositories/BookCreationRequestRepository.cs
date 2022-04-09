@@ -6,7 +6,6 @@ using EipqLibrary.Infrastructure.Data.Repositories.Common;
 using EipqLibrary.Infrastructure.Data.Utils.Extensions;
 using EipqLibrary.Infrastructure.Data.Utils.Extensions.ObsoletExtensions;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace EipqLibrary.Infrastructure.Data.Repositories
