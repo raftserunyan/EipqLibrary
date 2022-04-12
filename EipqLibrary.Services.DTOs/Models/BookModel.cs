@@ -1,5 +1,4 @@
-﻿using EipqLibrary.Domain.Core.Enums;
-using System;
+﻿using System;
 
 namespace EipqLibrary.Services.DTOs.Models
 {
@@ -14,7 +13,6 @@ namespace EipqLibrary.Services.DTOs.Models
         public int TotalCount { get; set; }
         public int AvailableForBorrowingCount { get; set; }
         public int AvailableForUsingInLibraryCount { get; set; }
-        public DeletionReason? DeletionReason { get; set; }
 
         public CategoryModel Category { get; set; }
     }

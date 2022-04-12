@@ -49,12 +49,13 @@ namespace EipqLibrary.Shared.Web.Services
 
         public TokenInfo CreateToken(UserTokenInfo user, string deviceId, string loginProvider = null)
         {
-            var expiryDate = DateTime.UtcNow.AddSeconds(300);
+            var expiryDate = DateTime.UtcNow.AddMinutes(60);
             var tokenId = Guid.NewGuid().ToString();
 
             var claims = GetClaimsForUser(user);
             claims.Add(new Claim(JwtRegisteredClaimNames.Jti, tokenId));
             claims.Add(new Claim("deviceId", deviceId));
+
             if (loginProvider != null)
             {
                 claims.Add(new Claim("provider", loginProvider));

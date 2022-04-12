@@ -11,6 +11,8 @@ namespace EipqLibrary.Infrastructure.Data.Repositories
         private readonly EipqLibraryDbContext _context;
         private IBookRepository _bookRepo;
         private ICategoryRepository _categoryRepo;
+        private IBookInstanceRepository _bookInstanceRepo;
+        private IReservationRepository _reservationRepo;
         private IBookCreationRequestRepository _bookCreationRequestRepo;
 
         public UnitOfWork(EipqLibraryDbContext context)
@@ -29,6 +31,14 @@ namespace EipqLibrary.Infrastructure.Data.Repositories
         public IBookCreationRequestRepository BookCreationRequestRepository
         {
             get { return _bookCreationRequestRepo ??= new BookCreationRequestRepository(_context); }
+        }
+        public IBookInstanceRepository BookInstanceRepository
+        {
+            get { return _bookInstanceRepo ??= _bookInstanceRepo = new BookInstanceRepository(_context); }
+        }
+        public IReservationRepository ReservationRepository
+        {
+            get { return _reservationRepo ??= _reservationRepo = new ReservationRepository(_context); }
         }
 
         public async Task SaveChangesAsync()

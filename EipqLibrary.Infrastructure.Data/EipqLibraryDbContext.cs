@@ -18,5 +18,7 @@ namespace EipqLibrary.Infrastructure.Data
         public DbSet<PublicRefreshToken> PublicRefreshTokens { get; set; }
         public DbSet<User> Students { get; set; }
         public DbSet<AdminRefreshToken> AdminRefreshTokens { get; set; }
+        public DbSet<Reservation> Reservations { get; set; }
+        public DbSet<BookInstance> BookInstances { get; set; }
     }
 }

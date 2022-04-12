@@ -1,6 +1,7 @@
 ﻿using EipqLibrary.Domain.Core.Enums;
 using Microsoft.AspNetCore.Identity;
 using System;
+using System.Collections.Generic;
 
 namespace EipqLibrary.Domain.Core.DomainModels
 {
@@ -14,5 +15,7 @@ namespace EipqLibrary.Domain.Core.DomainModels
 
         public int GroupId { get; set; }
         public Group Group { get; set; }
+
+        public List<Reservation> Borrowings { get; set; }
     }
 }

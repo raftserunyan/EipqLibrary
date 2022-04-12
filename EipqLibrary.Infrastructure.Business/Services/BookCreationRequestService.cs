@@ -27,12 +27,12 @@ namespace EipqLibrary.Infrastructure.Business.Services
             var request = await _uow.BookCreationRequestRepository.GetByIdAsync(accountantAction.RequestId);
             EnsureExists(request, $"BookCreationRequest with id {accountantAction.RequestId} does not exist");
 
-            if (request.RequestStatus != Domain.Core.Enums.BookCreationRequestStatus.Pending)
+            if (request.RequestStatus != BookCreationRequestStatus.Pending)
             {
                 throw BadRequest("Accountant already acted on this request");
             }
 
-            if (accountantAction.AccountantActionResult == Domain.Core.Enums.BookCreationRequestStatus.Approved)
+            if (accountantAction.AccountantActionResult == BookCreationRequestStatus.Approved)
             {
                 var book = await _uow.BookRepository.GetFirstAsync(x => x.Name == request.Name && x.Author == request.Author);
                 if (book == null)

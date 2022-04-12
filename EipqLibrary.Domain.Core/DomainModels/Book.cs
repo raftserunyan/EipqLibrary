@@ -1,5 +1,5 @@
 ﻿using EipqLibrary.Domain.Core.DomainModels.Common;
-using EipqLibrary.Domain.Core.Enums;
+using System.Collections.Generic;
 
 namespace EipqLibrary.Domain.Core.DomainModels
 {
@@ -13,9 +13,10 @@ namespace EipqLibrary.Domain.Core.DomainModels
         public int TotalCount { get; set; }
         public int AvailableForBorrowingCount { get; set; }
         public int AvailableForUsingInLibraryCount { get; set; }
-        public DeletionReason? DeletionReason { get; set; }
 
         public int CategoryId { get; set; }
         public Category Category { get ; set; }
+
+        public IEnumerable<BookInstance> Instances { get; set; }
     }
 }

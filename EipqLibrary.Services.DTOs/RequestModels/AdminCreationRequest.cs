@@ -7,6 +7,6 @@ namespace EipqLibrary.Services.DTOs.RequestModels
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
-        public Occupation Occupation { get; set; } = Occupation.None;
+        public Occupation Occupation { get; set; }
     }
 }

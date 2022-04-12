@@ -58,11 +58,6 @@ namespace EipqLibrary.API
                     options.SerializerSettings.Converters.Add(new StringEnumConverter());
                 });
 
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "EipqLibrary.API", Version = "v1" });
-            });
-
             services.AddRepositories();
             services.AddUnitOfWork();
 
@@ -120,6 +115,40 @@ namespace EipqLibrary.API
             services.AddScoped<IGroupService, GroupService>();
             services.AddScoped<IProfessionService, ProfessionService>();
             services.AddScoped<IBookCreationRequestService, BookCreationRequestService>();
+            services.AddScoped<IReservationService, ReservationService>();
+
+            // Swagger
+            //services.AddSwaggerGen(c =>
+            //{
+            //    c.SwaggerDoc("v1", new OpenApiInfo { Title = "EipqLibrary.API", Version = "v1" });
+            //});
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "EipqLibrary.API", Version = "v1" });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        new string[] { }
+                    }
+                });
+                c.CustomSchemaIds(x => x.FullName);
+            });
 
             // Email Service
             services.AddEmailService();
@@ -144,6 +173,7 @@ namespace EipqLibrary.API
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
             });
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

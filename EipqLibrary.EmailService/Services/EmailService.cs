@@ -1,5 +1,7 @@
 ﻿using EipqLibrary.EmailService.Interfaces;
 using EipqLibrary.EmailService.Models;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Net.Mail;
 using System.Threading.Tasks;
 
@@ -10,21 +12,31 @@ namespace EipqLibrary.EmailService.Services
         private readonly IMessageDeliveryClientFactory<SmtpClient> _clientFactory;
 
         private readonly EmailSettings _emailSettings;
+        private readonly ILogger<EmailService> _logger;
 
         public EmailService(IMessageDeliveryClientFactory<SmtpClient> clientFactory,
-                            EmailSettings emailSettings)
+                            EmailSettings emailSettings,
+                            ILogger<EmailService> logger)
         {
             _clientFactory = clientFactory;
             _emailSettings = emailSettings;
+            _logger = logger;
         }
 
         public async Task SendEmailMessageAsync(MailMessage message)
         {
-            message.Sender = SenderEmailAddress;
-            message.From = SenderEmailAddress;
+            try
+            {
+                message.Sender = SenderEmailAddress;
+                message.From = SenderEmailAddress;
 
-            var client = _clientFactory.Create(_emailSettings);
-            await client.SendMailAsync(message);
+                var client = _clientFactory.Create(_emailSettings);
+                await client.SendMailAsync(message);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
         }
 
         public MailMessage GenerateRegistrationDeniedMailMessage(string emailTo, string additionalMessage = null)
