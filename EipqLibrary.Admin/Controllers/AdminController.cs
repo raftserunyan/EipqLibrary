@@ -3,6 +3,7 @@ using EipqLibrary.Domain.Core.AggregatedEntities;
 using EipqLibrary.Services.DTOs.Models;
 using EipqLibrary.Services.DTOs.RequestModels;
 using EipqLibrary.Services.Interfaces.ServiceInterfaces;
+using EipqLibrary.Shared.CustomExceptions;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Net;
@@ -16,18 +17,26 @@ namespace EipqLibrary.Admin.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IAdminIdentityService _adminIdentityService;
+        private readonly IUserService _userService;
 
         public AdminController(IMapper mapper,
-                               IAdminIdentityService adminIdentityService)
+                               IAdminIdentityService adminIdentityService,
+                               IUserService userService)
         {
             _mapper = mapper;
             _adminIdentityService = adminIdentityService;
+            _userService = userService;
         }
 
         [HttpPost]
         [ProducesResponseType(typeof(AdminUserModel), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> CreateAdmin(AdminCreationRequest adminCreationRequest)
         {
+            if (await _userService.GetByEmailOrDefaultAsync(adminCreationRequest.Email) != null)
+            {
+                throw new BadDataException($"A user with email {adminCreationRequest.Email} already exists");
+            }
+
             var adminCreationDto = _mapper.Map<AdminCreationDto>(adminCreationRequest);
             var admin = await _adminIdentityService.CreateAsync(adminCreationDto);
 
