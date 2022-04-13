@@ -119,6 +119,7 @@ namespace EipqLibrary.Admin
             services.AddScoped<IBookCreationRequestService, BookCreationRequestService>();
             services.AddScoped<IBookService, BookService>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IUserService, UserService>();
 
             // Email Service
             services.AddEmailService();

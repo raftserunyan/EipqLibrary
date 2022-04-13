@@ -12,6 +12,7 @@ namespace EipqLibrary.Services.Interfaces.ServiceInterfaces
         Task<UpdateUserStatusDto> UpdateUserStatusAsync(UpdateUserStatusRequest customerUpdateRequest);
         Task<User> ConfirmUserAccount(string userId);
         Task<User> DeleteUserAccount(string userId);
+        Task<UserModel> GetByEmailOrDefaultAsync(string email);
         Task<PagedData<UserDto>> GetAllAsync(PageInfo pageInfo, UserSortOption userSort, UserStatus? status);
     }
 }

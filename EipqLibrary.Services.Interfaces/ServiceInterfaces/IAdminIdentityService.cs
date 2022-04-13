@@ -13,6 +13,7 @@ namespace EipqLibrary.Services.Interfaces.ServiceInterfaces
         Task DeleteAsync(AdminDeletionDto adminDeletionDto);
 
         Task<AdminInfo> GetByEmail(string email);
+        Task<AdminInfo> GetByEmailOrDefaultAsync(string email);
 
         PagedData<AdminInfo> GetAll(PageInfo pageInfo);
     }

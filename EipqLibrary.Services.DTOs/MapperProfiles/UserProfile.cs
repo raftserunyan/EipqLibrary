@@ -14,6 +14,7 @@ namespace EipqLibrary.Services.DTOs.MapperProfiles
             CreateMap<UserCreationDto, User>().ReverseMap();
             CreateMap<RegistrationRequest, UserCreationDto>().ReverseMap();
             CreateMap<User, UpdateUserStatusDto>().ReverseMap();
+            CreateMap<User, UserModel>();
 
             CreateMap<User, UserDto>()
                 .ForMember(x => x.GroupNumber, opts => opts.MapFrom(u => u.Group.Number)).ReverseMap();

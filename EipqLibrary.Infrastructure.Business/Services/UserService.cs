@@ -74,9 +74,22 @@ namespace EipqLibrary.Infrastructure.Business.Services
             return pagedUserDtos;
         }
 
+        public async Task<UserModel> GetByEmailOrDefaultAsync(string email)
+        {
+            var user = await _userRepository.FindAsync(x => x.Email == email);
+            if (user == null)
+            {
+                return null;
+            }
+
+            var userModel = _mapper.Map<UserModel>(user);
+            return userModel;
+        }
+
         private static Exception InvalidDeleteException(string email)
         {
             return new GeneralException($"Could not delete user with email {email}");
         }
+
     }
 }

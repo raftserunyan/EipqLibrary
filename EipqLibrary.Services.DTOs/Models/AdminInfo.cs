@@ -4,12 +4,13 @@ namespace EipqLibrary.Services.DTOs.Models
 {
     public class AdminInfo
     {
-        public string Name { get; set; } = null;
-        public string FirstName { get; set; } = null;
-        public string LastName { get; set; } = null;
-        public string Email { get; set; } = null;
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Email { get; set; }
         public bool IsActive { get; set; }
-        public string Occupation { get; set; } = null;
-        public string PhoneNumber { get; set; } = null;
+        public string Occupation { get; set; }
+        public string PhoneNumber { get; set; }
     }
 }

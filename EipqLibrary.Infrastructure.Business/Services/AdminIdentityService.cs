@@ -119,6 +119,18 @@ namespace EipqLibrary.Infrastructure.Business.Services
             await _refreshTokenService.RemoveAllForAdminId(admin.Id);
         }
 
+        public async Task<AdminInfo> GetByEmailOrDefaultAsync(string email)
+        {
+            var admin = await _userManager.FindByEmailAsync(email);
+            if (admin == null)
+            {
+                return null;
+            }
+
+            var adminInfo = _mapper.Map<AdminInfo>(admin);
+            return adminInfo;
+        }
+
         //Private methods
         private static Exception InvalidUpdateException(string adminEmail) =>
             new GeneralException($"Could not update user with email {adminEmail}");
