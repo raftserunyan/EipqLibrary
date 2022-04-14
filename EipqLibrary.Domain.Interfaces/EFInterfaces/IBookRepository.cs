@@ -8,5 +8,6 @@ namespace EipqLibrary.Domain.Interfaces.EFInterfaces
     public interface IBookRepository : IBaseRepository<Book>
     {
         Task<PagedData<Book>> GetAllFilteredAndPagedAsync(PageInfo pageInfo, int? categoryId, string author);
+        Task<Book> GetByIdWithInstancesAndReservationsAsync(int id);
     }
 }

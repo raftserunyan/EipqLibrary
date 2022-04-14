@@ -6,5 +6,6 @@ namespace EipqLibrary.Services.DTOs.Authentication
     {
         public AuthenticationResponse TokensData;
         public AdminInfo Admin;
+        public int Role { get; set; }
     }
 }

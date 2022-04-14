@@ -30,7 +30,7 @@ namespace EipqLibrary.API.Controllers
 
         [Authorize]
         [HttpPost]
-        [ProducesResponseType(typeof(Reservation), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(int), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Create(ReservationCreationRequest request)
         {
             var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
@@ -42,7 +42,7 @@ namespace EipqLibrary.API.Controllers
 
             var reservation = await _reservationService.CreateAsync(request, user);
 
-            return Ok(reservation);
+            return Ok(reservation.Id);
         }
     }
 }

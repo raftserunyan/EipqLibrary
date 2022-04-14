@@ -6,6 +6,7 @@ using EipqLibrary.Domain.Interfaces.EFInterfaces;
 using EipqLibrary.Services.DTOs.Models;
 using EipqLibrary.Services.DTOs.RequestModels;
 using EipqLibrary.Services.Interfaces.ServiceInterfaces;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace EipqLibrary.Infrastructure.Business.Services
@@ -56,11 +57,17 @@ namespace EipqLibrary.Infrastructure.Business.Services
                     book.AvailableForUsingInLibraryCount += request.AvailableForUsingInLibraryCount;
                 }
 
-                request.RequestStatus = Domain.Core.Enums.BookCreationRequestStatus.Approved;
+                book.Instances = new List<BookInstance>();
+                for (int i = 0; i < request.AvailableForBorrowingCount; i++)
+                {
+                    book.Instances.Add(new BookInstance());
+                }
+
+                request.RequestStatus = BookCreationRequestStatus.Approved;
             }
             else
             {
-                request.RequestStatus = Domain.Core.Enums.BookCreationRequestStatus.Rejected;
+                request.RequestStatus = BookCreationRequestStatus.Rejected;
             }
 
             request.AccountantActionDate = System.DateTime.Now;

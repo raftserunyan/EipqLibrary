@@ -1,5 +1,6 @@
 ﻿using EipqLibrary.Domain.Core.Enums;
 using EipqLibrary.Services.DTOs.Models;
+using EipqLibrary.Services.DTOs.RequestModels;
 using EipqLibrary.Services.Interfaces.ServiceInterfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -24,22 +25,22 @@ namespace EipqLibrary.Admin.Controllers
 
         [HttpPost("getUserRole")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetUserRole([FromQuery] string email)
+        public async Task<IActionResult> GetUserRole([FromBody] GetUserRoleRequest request)
         {
             var response = new GetUserRoleResponse();
 
-            if (email == null)
+            if (request.Email == null)
             {
                 response.UserExists = false;
             }
             else
             {
-                if (await _userService.GetByEmailOrDefaultAsync(email) != null)
+                if (await _userService.GetByEmailOrDefaultAsync(request.Email) != null)
                 {
                     response.UserExists = true;
                     response.UserRole = (int)UserRole.Student;
                 }
-                else if (await _adminService.GetByEmailOrDefaultAsync(email) != null)
+                else if (await _adminService.GetByEmailOrDefaultAsync(request.Email) != null)
                 {
                     response.UserExists = true;
                     response.UserRole = (int)UserRole.Admin;

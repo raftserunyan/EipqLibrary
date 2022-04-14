@@ -105,6 +105,7 @@ namespace EipqLibrary.Infrastructure.Business.Services
 
             var authResponse = await CreateTokenAndRefreshToken(user);
             authResponse.DisplayName = user.FirstName + " " + user.LastName;
+            authResponse.Role = 3;
 
             await _userManager.ResetAccessFailedCountAsync(user);
 

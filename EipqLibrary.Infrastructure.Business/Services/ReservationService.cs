@@ -26,7 +26,7 @@ namespace EipqLibrary.Infrastructure.Business.Services
         public async Task<Reservation> CreateAsync(ReservationCreationRequest request, User user)
         {
             //Check if the book being requested exists
-            var book = await _uow.BookRepository.GetByIdWithIncludeAsync(request.BookId, x => x.Instances);
+            var book = await _uow.BookRepository.GetByIdWithInstancesAndReservationsAsync(request.BookId);
             EnsureExists(book, $"A book with ID {request.BookId} does not exist");
 
             //Keep only date part of the DateTimes
@@ -61,7 +61,7 @@ namespace EipqLibrary.Infrastructure.Business.Services
             {
                 var reservations = instance.GetActiveReservations().OrderBy(x => x.ExpectedBorrowingDate);
 
-                var lastReturnDate = DateTime.Now;
+                var lastReturnDate = DateTime.Now.DropTimePart();
                 //Check if the new reservation can fit between any two of the existing reservations
                 foreach (var reservation in reservations)
                 {

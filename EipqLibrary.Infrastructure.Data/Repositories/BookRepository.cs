@@ -24,5 +24,13 @@ namespace EipqLibrary.Infrastructure.Data.Repositories
                 .SortBooks()
                 .Paged(pageInfo);
         }
+
+        public async Task<Book> GetByIdWithInstancesAndReservationsAsync(int id)
+        {
+            return await _context.Books
+                .Include(x => x.Instances)
+                    .ThenInclude(i => i.Borrowings)
+                .FirstOrDefaultAsync(x => x.Id == id);
+        }
     }
 }

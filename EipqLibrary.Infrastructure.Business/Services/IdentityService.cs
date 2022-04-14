@@ -59,6 +59,7 @@ namespace EipqLibrary.Infrastructure.Business.Services
             AuthenticationWithAdminResponse authenticationResponse = new AuthenticationWithAdminResponse();
             authenticationResponse.TokensData = await CreateTokenAndRefreshToken(user);
             authenticationResponse.Admin = _mapper.Map<AdminInfo>(user);
+            authenticationResponse.Role = (int)user.Occupation;
             return authenticationResponse;
         }
 

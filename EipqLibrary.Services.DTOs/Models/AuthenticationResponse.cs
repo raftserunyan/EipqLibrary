@@ -10,5 +10,6 @@ namespace EipqLibrary.Services.DTOs.Models
         public DateTime RefreshTokenExpiryDate { get; set; }
         public string UserFirstName { get; set; }
         public string DisplayName { get; set; }
+        public int Role { get; set; }
     }
 }

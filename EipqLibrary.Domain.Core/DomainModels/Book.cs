@@ -17,6 +17,6 @@ namespace EipqLibrary.Domain.Core.DomainModels
         public int CategoryId { get; set; }
         public Category Category { get ; set; }
 
-        public IEnumerable<BookInstance> Instances { get; set; }
+        public ICollection<BookInstance> Instances { get; set; }
     }
 }
