@@ -8,7 +8,7 @@ namespace EipqLibrary.Services.Interfaces.ServiceInterfaces
 {
     public interface IIdentityService
     {
-        Task<AuthenticationWithAdminResponse> Login(AuthenticationRequest request);
+        Task<AuthenticationResponse> Login(AuthenticationRequest request);
         Task<AuthenticationResponse> RefreshToken(RefreshTokenRequest request);
         Task<UserActiveTokensResponse> ActiveTokensCount();
         Task Logout();

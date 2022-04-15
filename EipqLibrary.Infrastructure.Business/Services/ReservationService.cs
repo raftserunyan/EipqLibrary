@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using EipqLibrary.Domain.Core.AggregatedEntities;
 using EipqLibrary.Domain.Core.DomainModels;
+using EipqLibrary.Domain.Core.Enums;
 using EipqLibrary.Domain.Interfaces.EFInterfaces;
 using EipqLibrary.Services.DTOs.RequestModels;
 using EipqLibrary.Services.Interfaces.ServiceInterfaces;
@@ -23,6 +25,41 @@ namespace EipqLibrary.Infrastructure.Business.Services
             _mapper = mapper;
         }
 
+        public async Task CancelReservationForAdminAsync(int reservationId)
+        {
+            var reservation = await _uow.ReservationRepository.GetByIdAsync(reservationId);
+            
+            if (reservation.Status == ReservationStatus.Borrowed ||
+                reservation.Status == ReservationStatus.Returned ||
+                reservation.Status == ReservationStatus.Cancelled)
+            {
+                throw BadRequest("You can cancel only the requests which are not borrowed or cancelled yet");
+            }
+
+            reservation.CancellationDate = DateTime.Now;
+            reservation.Status = ReservationStatus.Cancelled;
+            await _uow.SaveChangesAsync();
+        }
+
+        public async Task CancelReservationForStudentAsync(int reservationId, string userId)
+        {
+            var reservation = await _uow.ReservationRepository.GetByIdAsync(reservationId);
+            if (reservation.UserId != userId)
+            {
+                throw new UnauthorizedAccessException("You can only cancel your reservations");
+            }
+            if (reservation.Status == ReservationStatus.Borrowed ||
+                reservation.Status == ReservationStatus.Returned ||
+                reservation.Status == ReservationStatus.Cancelled)
+            {
+                throw BadRequest("You can cancel only the requests which are not borrowed or cancelled yet");
+            }
+
+            reservation.CancellationDate = DateTime.Now;
+            reservation.Status = ReservationStatus.Cancelled;
+            await _uow.SaveChangesAsync();
+        }
+
         public async Task<Reservation> CreateAsync(ReservationCreationRequest request, User user)
         {
             //Check if the book being requested exists
@@ -35,11 +72,18 @@ namespace EipqLibrary.Infrastructure.Business.Services
 
             //Check if there'll be available book for borrowing for the requested time
             int availableBookInstanceId = -1;
+            DateTime? suggestedTime = null;
 
-            bool canBeReserved = IsThereFreeBookForTheInterval(book, request, ref availableBookInstanceId);
+            bool canBeReserved = IsThereFreeBookForTheInterval(book, request, ref availableBookInstanceId, ref suggestedTime);
             if (!canBeReserved)
             {
-                throw BadRequest($"There'll be no free instances of \"{book.Author} - {book.Name}\" for the specified time interval");
+                var message = $"There'll be no free instances of \"{book.Author} - {book.Name}\" for the specified time interval.";
+                if (suggestedTime != null)
+                {
+                    message += $"Suggested time: starting from {suggestedTime.Value.ToShortDateString()}";
+                }
+
+                throw BadRequest(message);
             }
             
             //Save the reservation
@@ -55,7 +99,23 @@ namespace EipqLibrary.Infrastructure.Business.Services
             return newReservation;
         }
 
-        private bool IsThereFreeBookForTheInterval(Book book, ReservationCreationRequest request, ref int bookInstanceId)
+        public async Task<PagedData<Reservation>> GetAllAsync(PageInfo pageInfo, ReservationSortOption reservationSort, ReservationStatus? status)
+        {
+            var pagedReservations = await _uow.ReservationRepository.GetAllAsync(pageInfo, reservationSort, status);
+            EnsureExists(pagedReservations);
+
+            return pagedReservations;
+        }
+
+        public async Task<PagedData<Reservation>> GetMyReservationsAsync(PageInfo pageInfo, ReservationSortOption reservationSort, ReservationStatus? status, string userId)
+        {
+            var pagedReservations = await _uow.ReservationRepository.GetMyReservationsAsync(pageInfo, reservationSort, userId, status);
+            EnsureExists(pagedReservations);
+
+            return pagedReservations;
+        }
+
+        private bool IsThereFreeBookForTheInterval(Book book, ReservationCreationRequest request, ref int bookInstanceId, ref DateTime? suggestedTime)
         {
             foreach (var instance in book.Instances)
             {
@@ -77,6 +137,18 @@ namespace EipqLibrary.Infrastructure.Business.Services
                 {
                     bookInstanceId = instance.Id;
                     return true;
+                }
+
+                if (suggestedTime != null)
+                {
+                    if (lastReturnDate < suggestedTime.Value)
+                    {
+                        suggestedTime = lastReturnDate;
+                    }
+                }
+                else
+                {
+                    suggestedTime = lastReturnDate;
                 }
             }
 

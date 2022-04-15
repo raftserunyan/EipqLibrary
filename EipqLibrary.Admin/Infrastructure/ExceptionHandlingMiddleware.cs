@@ -35,6 +35,9 @@ namespace EipqLibrary.Admin.Infrastructure
                     case BadDataException e:
                         response.StatusCode = (int)HttpStatusCode.BadRequest;
                         break;
+                    case UnauthorizedAccessException e:
+                        response.StatusCode= (int)HttpStatusCode.Unauthorized;
+                        break;
                     default:
                         // unhandled error
                         response.StatusCode = (int)HttpStatusCode.InternalServerError;

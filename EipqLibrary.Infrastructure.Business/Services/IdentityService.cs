@@ -34,7 +34,7 @@ namespace EipqLibrary.Infrastructure.Business.Services
             _mapper = mapper;
         }
 
-        public async Task<AuthenticationWithAdminResponse> Login(AuthenticationRequest request)
+        public async Task<AuthenticationResponse> Login(AuthenticationRequest request)
         {
             var user = await _userManager.FindByEmailAsync(request.Username);
 
@@ -56,9 +56,8 @@ namespace EipqLibrary.Infrastructure.Business.Services
                 throw DisabledAdminException();
             }
 
-            AuthenticationWithAdminResponse authenticationResponse = new AuthenticationWithAdminResponse();
-            authenticationResponse.TokensData = await CreateTokenAndRefreshToken(user);
-            authenticationResponse.Admin = _mapper.Map<AdminInfo>(user);
+            AuthenticationResponse authenticationResponse = new AuthenticationResponse();
+            authenticationResponse = await CreateTokenAndRefreshToken(user);
             authenticationResponse.Role = (int)user.Occupation;
             return authenticationResponse;
         }

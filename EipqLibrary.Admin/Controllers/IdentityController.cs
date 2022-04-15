@@ -1,7 +1,10 @@
-﻿using EipqLibrary.Services.DTOs.Authentication;
+﻿using EipqLibrary.Admin.Attributes;
+using EipqLibrary.Domain.Core.Constants.Admins;
+using EipqLibrary.Services.DTOs.Authentication;
 using EipqLibrary.Services.DTOs.Models;
 using EipqLibrary.Services.Interfaces.ServiceInterfaces;
 using EipqLibrary.Shared.Web.Dtos.Tokens;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Threading.Tasks;
@@ -11,6 +14,7 @@ namespace EipqLibrary.Admin.Controllers
     [Produces("application/json")]
     [Route("api/admin/identity")]
     [ApiController]
+    [AuthorizeRoles(AdminRoleNames.SuperAdmin, AdminRoleNames.Librarian, AdminRoleNames.Accountant)]
     public class IdentityController : ControllerBase
     {
         private readonly IIdentityService _identityService;
@@ -20,8 +24,9 @@ namespace EipqLibrary.Admin.Controllers
             _identityService = identityService;
         }
 
+        [AllowAnonymous]
         [HttpPost("login")]
-        [ProducesResponseType(typeof(AuthenticationWithAdminResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(AuthenticationResponse), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Login([FromBody] AuthenticationRequest request)
         {
             var authResponse = await _identityService.Login(request);
