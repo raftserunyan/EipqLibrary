@@ -8,4 +8,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.14" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\EipqLibrary.Shared\EipqLibrary.Shared.csproj" />
+  </ItemGroup>
+
 </Project>

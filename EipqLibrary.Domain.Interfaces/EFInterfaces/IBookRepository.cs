@@ -9,5 +9,6 @@ namespace EipqLibrary.Domain.Interfaces.EFInterfaces
     {
         Task<PagedData<Book>> GetAllFilteredAndPagedAsync(PageInfo pageInfo, int? categoryId, string author);
         Task<Book> GetByIdWithInstancesAndReservationsAsync(int id);
+        Task<Book> GetByIdIncludingInstancesAndTheirBorrowings(int id);
     }
 }
