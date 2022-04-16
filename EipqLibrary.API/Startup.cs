@@ -75,7 +75,6 @@ namespace EipqLibrary.API
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
                 options.Lockout.MaxFailedAccessAttempts = 5;
                 options.SignIn.RequireConfirmedEmail = false;
-                options.User.RequireUniqueEmail = false;
                 options.Tokens.PasswordResetTokenProvider = "resetpassword";
                 options.Tokens.EmailConfirmationTokenProvider = "emailconfirmation";
             });

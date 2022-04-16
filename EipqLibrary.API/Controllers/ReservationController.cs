@@ -5,14 +5,9 @@ using EipqLibrary.Domain.Core.Enums;
 using EipqLibrary.Services.DTOs.Models;
 using EipqLibrary.Services.DTOs.RequestModels;
 using EipqLibrary.Services.Interfaces.ServiceInterfaces;
-using EipqLibrary.Shared.CustomExceptions;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -75,14 +70,12 @@ namespace EipqLibrary.API.Controllers
         public async Task<IActionResult> CancelReservation([FromQuery]int id)
         {
             var user = await GetCurrentStudentUserAsync();
-            if (user != null)
+            if (user == null)
             {
-                await _reservationService.CancelReservationForStudentAsync(id, user.Id);
-                return Ok();
+                return new UnauthorizedObjectResult("You have to be logged in as a student/lecturer");
             }
 
-            //If the canceller is admin
-            await _reservationService.CancelReservationForAdminAsync(id);
+            await _reservationService.CancelReservationForStudentAsync(id, user.Id);
             return Ok();
         }
 

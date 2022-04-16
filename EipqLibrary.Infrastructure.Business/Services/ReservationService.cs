@@ -15,6 +15,7 @@ namespace EipqLibrary.Infrastructure.Business.Services
 {
     public class ReservationService : BaseService, IReservationService
     {
+        private const byte daysUntilReturnDate = 2;
         private readonly IUnitOfWork _uow;
         private readonly IMapper _mapper;
 
@@ -57,6 +58,31 @@ namespace EipqLibrary.Infrastructure.Business.Services
 
             reservation.CancellationDate = DateTime.Now;
             reservation.Status = ReservationStatus.Cancelled;
+            await _uow.SaveChangesAsync();
+        }
+
+        public async Task ChangeReservationStatusAsync(int reservationId, ReservationStatusChangeRequest changes)
+        {
+            var reservation = await _uow.ReservationRepository.GetByIdAsync(reservationId);
+
+            switch (changes.Status)
+            {                
+                case ReservationStatus.Cancelled:
+                    CancelReservation(reservation);
+                    break;
+                case ReservationStatus.Borrowed:
+                    BorrowReservation(reservation);
+                    break;
+                case ReservationStatus.Returned:
+                    ReturnReservation(reservation);
+                    break;
+                case ReservationStatus.Reserved:
+                    throw BadRequest("You can not set the status (back) to 'Reserved'");
+                    break;
+                default:
+                    break;
+            }
+
             await _uow.SaveChangesAsync();
         }
 
@@ -107,12 +133,65 @@ namespace EipqLibrary.Infrastructure.Business.Services
             return pagedReservations;
         }
 
+        public async Task<PagedData<Reservation>> GetAllReservationsPagedAsync(PageInfo pageInfo, ReservationSortOption reservationSort, ReservationStatus? status)
+        {
+            var pagedReservations = await _uow.ReservationRepository.GetAllReservationsFilteredAndPagedAsync(pageInfo, reservationSort, status);
+            EnsureExists(pagedReservations);
+
+            return pagedReservations;
+        }
+
         public async Task<PagedData<Reservation>> GetMyReservationsAsync(PageInfo pageInfo, ReservationSortOption reservationSort, ReservationStatus? status, string userId)
         {
             var pagedReservations = await _uow.ReservationRepository.GetMyReservationsAsync(pageInfo, reservationSort, userId, status);
             EnsureExists(pagedReservations);
 
             return pagedReservations;
+        }
+
+        public async Task<PagedData<Reservation>> GetSoonEndingReservationsPagedAsync(PageInfo pageInfo)
+        {
+            var reservationsPaged = await _uow.ReservationRepository.GetSoonEndingReservationsPagedAsync(pageInfo, daysUntilReturnDate);
+
+            return reservationsPaged;
+        }
+
+        // Private methods
+        private void BorrowReservation(Reservation reservation)
+        {
+            if (reservation.Status == ReservationStatus.Returned ||
+                reservation.Status == ReservationStatus.Cancelled ||
+                reservation.Status == ReservationStatus.Borrowed)
+            {
+                throw BadRequest("You can only borrow when the reservation status is still 'Reserved'");
+            }
+
+            reservation.Status = ReservationStatus.Borrowed;
+            reservation.ActualBorrowingDate = DateTime.Now;
+        }
+        private void CancelReservation(Reservation reservation)
+        {
+            if (reservation.Status == ReservationStatus.Returned ||
+                reservation.Status == ReservationStatus.Cancelled ||
+                reservation.Status == ReservationStatus.Borrowed)
+            {
+                throw BadRequest("You can only cancel when the reservation status is 'Reserved'");
+            }
+
+            reservation.Status = ReservationStatus.Cancelled;
+            reservation.CancellationDate = DateTime.Now;
+        }
+        private void ReturnReservation(Reservation reservation)
+        {
+            if (reservation.Status == ReservationStatus.Reserved ||
+                reservation.Status == ReservationStatus.Cancelled ||
+                reservation.Status == ReservationStatus.Returned)
+            {
+                throw BadRequest("You can only return when the reservation status is 'Borrowed'");
+            }
+
+            reservation.Status = ReservationStatus.Returned;
+            reservation.ActualReturnDate = DateTime.Now;
         }
 
         private bool IsThereFreeBookForTheInterval(Book book, ReservationCreationRequest request, ref int bookInstanceId, ref DateTime? suggestedTime)

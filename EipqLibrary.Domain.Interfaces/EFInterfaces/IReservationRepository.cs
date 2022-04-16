@@ -10,5 +10,7 @@ namespace EipqLibrary.Domain.Interfaces.EFInterfaces
     {
         Task<PagedData<Reservation>> GetAllAsync(PageInfo pageInfo, ReservationSortOption reservationSort, ReservationStatus? status = null);
         Task<PagedData<Reservation>> GetMyReservationsAsync(PageInfo pageInfo, ReservationSortOption reservationSort, string userId, ReservationStatus? status = null);
+        Task<PagedData<Reservation>> GetAllReservationsFilteredAndPagedAsync(PageInfo pageInfo, ReservationSortOption reservationSort, ReservationStatus? status = null);
+        Task<PagedData<Reservation>> GetSoonEndingReservationsPagedAsync(PageInfo pageInfo, int daysUntilReturnDate);
     }
 }

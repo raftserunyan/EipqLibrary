@@ -11,7 +11,10 @@ namespace EipqLibrary.Services.Interfaces.ServiceInterfaces
         Task<Reservation> CreateAsync(ReservationCreationRequest request, User user);
         Task CancelReservationForStudentAsync(int reservationId, string userId);
         Task CancelReservationForAdminAsync(int reservationId);
+        Task ChangeReservationStatusAsync(int reservationId, ReservationStatusChangeRequest changes);
         Task<PagedData<Reservation>> GetAllAsync(PageInfo pageInfo, ReservationSortOption reservationSort, ReservationStatus? status);
         Task<PagedData<Reservation>> GetMyReservationsAsync(PageInfo pageInfo, ReservationSortOption reservationSort, ReservationStatus? status, string userId);
+        Task<PagedData<Reservation>> GetAllReservationsPagedAsync(PageInfo pageInfo, ReservationSortOption reservationSort, ReservationStatus? status);
+        Task<PagedData<Reservation>> GetSoonEndingReservationsPagedAsync(PageInfo pageInfo);
     }
 }

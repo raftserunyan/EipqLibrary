@@ -12,6 +12,7 @@ namespace EipqLibrary.Domain.Core.DomainModels
         public string StudentCardNumber { get; set; }
         public UserStatus Status { get; set; }
         public DateTime RegistrationDate { get; set; }
+        public int GroupNumber { get; set; }
 
         public int GroupId { get; set; }
         public Group Group { get; set; }
