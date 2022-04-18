@@ -14,6 +14,7 @@ namespace EipqLibrary.Infrastructure.Data.Repositories
         private IBookInstanceRepository _bookInstanceRepo;
         private IReservationRepository _reservationRepo;
         private IBookCreationRequestRepository _bookCreationRequestRepo;
+        private IBookDeletionRequestRepository _bookDeletionRequestRepo;
 
         public UnitOfWork(EipqLibraryDbContext context)
         {
@@ -31,6 +32,10 @@ namespace EipqLibrary.Infrastructure.Data.Repositories
         public IBookCreationRequestRepository BookCreationRequestRepository
         {
             get { return _bookCreationRequestRepo ??= new BookCreationRequestRepository(_context); }
+        }
+        public IBookDeletionRequestRepository BookDeletionRequestRepository
+        {
+            get { return _bookDeletionRequestRepo ??= new BookDeletionRequestRepository(_context); }
         }
         public IBookInstanceRepository BookInstanceRepository
         {

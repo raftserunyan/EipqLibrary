@@ -5,6 +5,7 @@ using EipqLibrary.Domain.Interfaces.EFInterfaces;
 using EipqLibrary.Services.DTOs.Models;
 using EipqLibrary.Services.DTOs.RequestModels;
 using EipqLibrary.Services.Interfaces.ServiceInterfaces;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -64,17 +65,42 @@ namespace EipqLibrary.Infrastructure.Business.Services
             }
             if (updateRequest.AvailableForBorrowingCount != existingBook.AvailableForBorrowingCount)
             {
-                ChechIfTheCountsCanBeChanged(updateRequest, existingBook);
+                CheckIfTheCountsCanBeChanged(updateRequest, existingBook);
             }
 
+            var difference = existingBook.AvailableForBorrowingCount - updateRequest.AvailableForBorrowingCount;
+
             _mapper.Map(updateRequest, existingBook);
+
+            if (difference < 0)
+            {
+                difference = Math.Abs(difference);
+                for (int i = 0; i < difference; i++)
+                {
+                    existingBook.Instances.Add(new BookInstance());
+                }
+            }
+            else if (difference > 0)
+            {
+                int i = 0;
+                foreach (var instance in existingBook.Instances.Where(x => x.CanBeRemovedFromBorrowablesList()))
+                {
+                    existingBook.Instances.Remove(instance);
+                    i++;
+                    if (i == difference)
+                    {
+                        break;
+                    }
+                }
+            }
+
             await _unitOfWork.SaveChangesAsync();
 
             return _mapper.Map<BookModel>(existingBook);
         }
 
         // Private methods
-        private void ChechIfTheCountsCanBeChanged(BookUpdateRequest updateRequest, Book existingBook)
+        private void CheckIfTheCountsCanBeChanged(BookUpdateRequest updateRequest, Book existingBook)
         {
             var difference = existingBook.AvailableForBorrowingCount - updateRequest.AvailableForBorrowingCount;
             if (difference > 0)

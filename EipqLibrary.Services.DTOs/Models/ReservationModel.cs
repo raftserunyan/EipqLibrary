@@ -1,4 +1,5 @@
-﻿using EipqLibrary.Domain.Core.Enums;
+﻿using EipqLibrary.Domain.Core.DomainModels;
+using EipqLibrary.Domain.Core.Enums;
 using System;
 
 namespace EipqLibrary.Services.DTOs.Models
@@ -14,7 +15,9 @@ namespace EipqLibrary.Services.DTOs.Models
         public DateTime? ActualBorrowingDate { get; set; }
         public DateTime? ActualReturnDate { get; set; }
 
-        public ReservationStatus Status { get; set; } 
+        public ReservationStatus Status { get; set; }
+
+        public BookModel Book { get; set; }
 
         public UserModel User { get; set; }
     }

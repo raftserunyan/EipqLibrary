@@ -12,7 +12,7 @@ namespace EipqLibrary.Infrastructure.Data.Migrations
                 table: "Books");
 
             migrationBuilder.CreateTable(
-                name: "BookInstances",
+                name: "BookInstances",  
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)

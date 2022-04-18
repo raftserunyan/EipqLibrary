@@ -19,7 +19,7 @@ namespace EipqLibrary.Domain.Core.DomainModels
         public string UserId { get; set; }
         public User User { get; set; }
 
-        public int BookInstanceId { get; set; }
+        public int? BookInstanceId { get; set; }
         public BookInstance BookInstance { get; set; }
     }
 }

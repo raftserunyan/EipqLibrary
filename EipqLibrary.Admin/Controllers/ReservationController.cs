@@ -1,17 +1,18 @@
 ﻿using AutoMapper;
+using EipqLibrary.Admin.Attributes;
 using EipqLibrary.Domain.Core.AggregatedEntities;
+using EipqLibrary.Domain.Core.Constants.Admins;
 using EipqLibrary.Domain.Core.Enums;
 using EipqLibrary.Services.DTOs.Models;
 using EipqLibrary.Services.DTOs.RequestModels;
 using EipqLibrary.Services.Interfaces.ServiceInterfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Threading.Tasks;
 
 namespace EipqLibrary.Admin.Controllers
 {
-    [Authorize]
+    [AuthorizeRoles(AdminRoleNames.SuperAdmin, AdminRoleNames.Librarian)]
     [Route("api/admin/reservations")]
     [ApiController]
     public class ReservationController : ControllerBase

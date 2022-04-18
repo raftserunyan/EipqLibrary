@@ -8,6 +8,7 @@ namespace EipqLibrary.Domain.Interfaces.EFInterfaces
         public IBookRepository BookRepository { get; }
         public ICategoryRepository CategoryRepository { get; }
         public IBookCreationRequestRepository BookCreationRequestRepository { get; }
+        public IBookDeletionRequestRepository BookDeletionRequestRepository { get; }
         public IBookInstanceRepository BookInstanceRepository{ get; }
         public IReservationRepository ReservationRepository{ get; }
 

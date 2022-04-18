@@ -30,6 +30,9 @@ namespace EipqLibrary.Infrastructure.Data.Repositories
         public async Task<PagedData<Reservation>> GetAllReservationsFilteredAndPagedAsync(PageInfo pageInfo, ReservationSortOption reservationSort, ReservationStatus? status = null)
         {
             return await _context.Reservations
+                .Include(x => x.BookInstance)
+                    .ThenInclude(x => x.Book)
+                .Include(x => x.User)
                 .FilterReservationsByStatus(status)
                 .SortReservations(reservationSort)
                 .Paged(pageInfo);
