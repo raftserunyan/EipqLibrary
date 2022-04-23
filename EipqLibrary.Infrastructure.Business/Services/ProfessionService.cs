@@ -10,31 +10,28 @@ using System.Threading.Tasks;
 
 namespace EipqLibrary.Infrastructure.Business.Services
 {
-    public class ProfessionService : IProfessionService
+    public class ProfessionService : BaseService, IProfessionService
     {
-        private readonly IProfessionRepository _professionRepository;
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
 
-        public ProfessionService(IProfessionRepository professionRepository,
-                                IMapper mapper,
+        public ProfessionService(IMapper mapper,
                                 IUnitOfWork unitOfWork)
         {
-            _professionRepository = professionRepository;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
 
         public async Task<ProfessionModel> Create(ProfessionCreationRequest professionCreationRequest)
         {
-            if (await _professionRepository.ExistsAsync(x => x.Name == professionCreationRequest.Name))
+            if (await _unitOfWork.ProfessionRepository.ExistsAsync(x => x.Name == professionCreationRequest.Name))
             {
                 throw new BadDataException($"A profession with name '{professionCreationRequest.Name}' already exists");
             }
 
             var profession = _mapper.Map<Profession>(professionCreationRequest);
 
-            await _professionRepository.AddAsync(profession);
+            await _unitOfWork.ProfessionRepository.AddAsync(profession);
             await _unitOfWork.SaveChangesAsync();
 
             return _mapper.Map<ProfessionModel>(profession);
@@ -42,21 +39,47 @@ namespace EipqLibrary.Infrastructure.Business.Services
 
         public async Task<bool> ExistsAsync(int professionId)
         {
-            return await _professionRepository.ExistsAsync(x => x.Id == professionId);
+            return await _unitOfWork.ProfessionRepository.ExistsAsync(x => x.Id == professionId);
         }
 
         public async Task<List<ProfessionModel>> GetAllAsync()
         {
-            var professions = await _professionRepository.GetAllAsync();
+            var professions = await _unitOfWork.ProfessionRepository.GetAllAsync();
 
             return _mapper.Map<List<ProfessionModel>>(professions);
         }
 
         public async Task<ProfessionModel> GetByIdAsync(int id)
         {
-            var profession = await _professionRepository.GetByIdAsync(id);
+            var profession = await _unitOfWork.ProfessionRepository.GetByIdAsync(id);
 
             return _mapper.Map<ProfessionModel>(profession);
+        }
+
+        public async Task<ProfessionModel> UpdateAsync(ProfessionUpdateRequest professionUpdateRequest)
+        {
+            var existingProfession = await _unitOfWork.ProfessionRepository.GetByIdAsync(professionUpdateRequest.Id);
+            EnsureExists(existingProfession);
+
+            bool isExistingProfessionActive = existingProfession.IsActive;
+
+            _mapper.Map(professionUpdateRequest, existingProfession);
+
+            if (isExistingProfessionActive != professionUpdateRequest.IsActive)
+            {
+                if (isExistingProfessionActive)
+                {
+                    existingProfession.DeletionDate = System.DateTime.Now;
+                }
+                else
+                {
+                    existingProfession.DeletionDate = null;
+                }
+            }
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return _mapper.Map<ProfessionModel>(existingProfession);
         }
     }
 }

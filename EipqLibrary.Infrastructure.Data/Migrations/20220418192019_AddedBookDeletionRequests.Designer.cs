@@ -4,14 +4,16 @@ using EipqLibrary.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EipqLibrary.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(EipqLibraryDbContext))]
-    partial class EipqLibraryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220418192019_AddedBookDeletionRequests")]
+    partial class AddedBookDeletionRequests
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -230,14 +232,8 @@ namespace EipqLibrary.Infrastructure.Data.Migrations
                     b.Property<string>("AccountantNote")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("BookAuthor")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int?>("BookId")
                         .HasColumnType("int");
-
-                    b.Property<string>("BookName")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Count")
                         .HasColumnType("int");
@@ -250,9 +246,6 @@ namespace EipqLibrary.Infrastructure.Data.Migrations
 
                     b.Property<DateTime>("RequestCreationDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
 
                     b.Property<int>("TemporarelyDeletedBorrowableBooksCount")
                         .HasColumnType("int");

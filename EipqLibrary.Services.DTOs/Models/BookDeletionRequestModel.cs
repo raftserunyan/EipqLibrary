@@ -12,11 +12,14 @@ namespace EipqLibrary.Services.DTOs.Models
         public DeletionReason DeletionReason { get; set; }
         public string Note { get; set; }
 
+        public string BookName { get; set; }
+        public string BookAuthor { get; set; }
+
         public DateTime RequestCreationDate { get; set; }
 
         public DateTime? AccountantActionDate { get; set; }
         public string AccountantNote { get; set; }
 
-        public Book Book { get; set; }
+        public BookModel Book { get; set; }
     }
 }

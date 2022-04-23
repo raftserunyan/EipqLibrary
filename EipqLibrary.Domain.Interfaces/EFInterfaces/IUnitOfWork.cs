@@ -11,6 +11,7 @@ namespace EipqLibrary.Domain.Interfaces.EFInterfaces
         public IBookDeletionRequestRepository BookDeletionRequestRepository { get; }
         public IBookInstanceRepository BookInstanceRepository{ get; }
         public IReservationRepository ReservationRepository{ get; }
+        public IProfessionRepository ProfessionRepository { get; }
 
         public Task SaveChangesAsync();
     }

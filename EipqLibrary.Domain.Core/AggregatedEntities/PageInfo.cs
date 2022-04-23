@@ -9,6 +9,6 @@ namespace EipqLibrary.Domain.Core.AggregatedEntities
         public int Page { get; set; } = 1;
 
         [Range(1, int.MaxValue)]
-        public int ItemsPerPage { get; set; } = 25;
+        public int ItemsPerPage { get; set; } = 100000;
     }
 }

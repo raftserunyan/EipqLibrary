@@ -9,8 +9,8 @@ namespace EipqLibrary.Domain.Interfaces.EFInterfaces
     public interface IReservationRepository : IBaseRepository<Reservation>
     {
         Task<PagedData<Reservation>> GetAllAsync(PageInfo pageInfo, ReservationSortOption reservationSort, ReservationStatus? status = null);
-        Task<PagedData<Reservation>> GetMyReservationsAsync(PageInfo pageInfo, ReservationSortOption reservationSort, string userId, ReservationStatus? status = null);
         Task<PagedData<Reservation>> GetAllReservationsFilteredAndPagedAsync(PageInfo pageInfo, ReservationSortOption reservationSort, ReservationStatus? status = null);
+        Task<PagedData<Reservation>> GetReservationsByUserIdAsync(string userId, PageInfo pageInfo, ReservationSortOption reservationSort, ReservationStatus? status = null);
         Task<PagedData<Reservation>> GetSoonEndingReservationsPagedAsync(PageInfo pageInfo, int daysUntilReturnDate);
     }
 }

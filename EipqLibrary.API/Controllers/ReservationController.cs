@@ -58,7 +58,7 @@ namespace EipqLibrary.API.Controllers
                 return new UnauthorizedObjectResult("You have to be logged in as a student/lecturer");
             }
 
-            var reservations = await _reservationService.GetMyReservationsAsync(pageInfo, reservationSort, status, user.Id);
+            var reservations = await _reservationService.GetReservationsByUserIdAsync(user.Id, pageInfo, reservationSort, status);
             var reservationModels = _mapper.Map<PagedData<ReservationModel>>(reservations);
 
             return Ok(reservationModels);

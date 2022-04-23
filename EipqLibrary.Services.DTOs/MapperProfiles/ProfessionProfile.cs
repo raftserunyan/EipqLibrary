@@ -11,6 +11,7 @@ namespace EipqLibrary.Services.DTOs.MapperProfiles
         {
             CreateMap<Profession, ProfessionModel>();
             CreateMap<ProfessionCreationRequest, Profession>();
+            CreateMap<ProfessionUpdateRequest, Profession>();
         }
     }
 }

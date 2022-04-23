@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EipqLibrary.Domain.Core.AggregatedEntities;
 using EipqLibrary.Domain.Core.DomainModels;
 using EipqLibrary.Services.DTOs.Models;
 using EipqLibrary.Services.DTOs.RequestModels;
@@ -11,6 +12,8 @@ namespace EipqLibrary.Services.DTOs.MapperProfiles
         {
             CreateMap<BookDeletionRequestDto, BookDeletionRequest>();
             CreateMap<BookDeletionRequest, BookDeletionRequestModel>();
+
+            CreateMap<PagedData<BookDeletionRequest>, PagedData<BookDeletionRequestModel>>();
         }
     }
 }

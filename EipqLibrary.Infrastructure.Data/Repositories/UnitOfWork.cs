@@ -15,6 +15,7 @@ namespace EipqLibrary.Infrastructure.Data.Repositories
         private IReservationRepository _reservationRepo;
         private IBookCreationRequestRepository _bookCreationRequestRepo;
         private IBookDeletionRequestRepository _bookDeletionRequestRepo;
+        private IProfessionRepository _professionRepo;
 
         public UnitOfWork(EipqLibraryDbContext context)
         {
@@ -44,6 +45,10 @@ namespace EipqLibrary.Infrastructure.Data.Repositories
         public IReservationRepository ReservationRepository
         {
             get { return _reservationRepo ??= _reservationRepo = new ReservationRepository(_context); }
+        }
+        public IProfessionRepository ProfessionRepository
+        {
+            get { return _professionRepo ??= _professionRepo = new ProfessionRepository(_context); }
         }
 
         public async Task SaveChangesAsync()

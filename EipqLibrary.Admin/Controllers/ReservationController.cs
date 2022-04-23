@@ -55,5 +55,15 @@ namespace EipqLibrary.Admin.Controllers
             await _reservationService.ChangeReservationStatusAsync(id, changes);
             return Ok();
         }
+
+        [HttpGet("{userId}")]
+        [ProducesResponseType(typeof(PagedData<ReservationModel>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetUsersReservations(string userId, [FromQuery] PageInfo pageInfo, [FromQuery] ReservationSortOption sort, [FromQuery] ReservationStatus? status)
+        {
+            var reservations = await _reservationService.GetReservationsByUserIdAsync(userId, pageInfo, sort, status);
+            var reservationModels = _mapper.Map<PagedData<ReservationModel>>(reservations);
+
+            return Ok(reservationModels);
+        }
     }
 }

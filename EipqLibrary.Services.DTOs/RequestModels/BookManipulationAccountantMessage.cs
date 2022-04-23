@@ -2,7 +2,7 @@
 
 namespace EipqLibrary.Services.DTOs.RequestModels
 {
-    public class BookCreationRequestAccountantMessage
+    public class BookManipulationAccountantMessage
     {
         public string AccountantMessage { get; set; }
     }

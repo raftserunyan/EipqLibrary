@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Dynamic;
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -27,24 +28,37 @@ namespace EipqLibrary.API.Infrastructure
                 var response = context.Response;
                 response.ContentType = "application/json";
 
+                dynamic responseBody = new ExpandoObject();
+                responseBody.hasError = true;
+                responseBody.errorMessage = error.Message;
+
                 switch (error)
                 {
                     case EntityNotFoundException e:
-                        response.StatusCode = (int)HttpStatusCode.NotFound;
-                        break;
+                        {
+                            response.StatusCode = (int)HttpStatusCode.OK;
+                            responseBody.actualStatusCode = (int)HttpStatusCode.NotFound;
+                            break;
+                        }
                     case BadDataException e:
-                        response.StatusCode = (int)HttpStatusCode.BadRequest;
-                        break;
+                        {
+                            response.StatusCode = (int)HttpStatusCode.OK;
+                            responseBody.actualStatusCode = (int)HttpStatusCode.BadRequest;
+                            break;
+                        }
                     case UnauthorizedAccessException e:
-                        response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                        break;
+                        {
+                            responseBody.errorMessage = e.Message;
+                            response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                            break;
+                        }
                     default:
                         // unhandled error
                         response.StatusCode = (int)HttpStatusCode.InternalServerError;
                         break;
                 }
 
-                var result = JsonSerializer.Serialize(new { message = error?.Message });
+                var result = JsonSerializer.Serialize((object)responseBody);
                 await response.WriteAsync(result);
             }
         }

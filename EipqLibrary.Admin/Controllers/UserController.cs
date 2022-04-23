@@ -31,7 +31,7 @@ namespace EipqLibrary.Admin.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(PagedData<UserModel>), (int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<IActionResult> Get([FromQuery] PageInfo pageInfo, [FromQuery] UserSortOption userSort, [FromQuery] UserStatus? status)
         {
             //if (!User.IsInRole(AdminRoleNames.SuperAdmin) && (status == null || status.Value == UserStatus.Deleted))
@@ -52,34 +52,34 @@ namespace EipqLibrary.Admin.Controllers
         }
 
         [HttpPost("changeStatus")]
-        [ProducesResponseType((int)HttpStatusCode.Accepted)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<IActionResult> ChangeUserStatus([FromBody]UpdateUserStatusRequest customerUpdateRequest)
         {
             var changedStatusCustomer = await _userService.UpdateUserStatusAsync(customerUpdateRequest);
 
-            return Accepted(changedStatusCustomer);
+            return Ok(changedStatusCustomer);
         }
 
         [HttpPost("confirm")]
-        [ProducesResponseType((int)HttpStatusCode.NoContent)]
-        public async Task<IActionResult> ConfirmUserAccount(string userId)
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        public async Task<IActionResult> ConfirmUserAccount(UserConfirmationRequest request)
         {
-            var user = await _userService.ConfirmUserAccount(userId);
+            var user = await _userService.ConfirmUserAccount(request.UserId);
             var emailMessage = _emailService.GenerateRegistrationConfirmedMailMessage(user.Email);
             await _emailService.SendEmailMessageAsync(emailMessage);
 
-            return NoContent();
+            return Ok();
         }
 
         [HttpPost("delete")]
-        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<IActionResult> DeleteUserAccount(DeleteUserRequest deleteRequest)
         {
             var deletedUser = await _userService.DeleteUserAccount(deleteRequest.UserId);
             var emailMessage = _emailService.GenerateAccountWasDeletedMailMessage(deletedUser.Email, deleteRequest.MessageToUser);
             await _emailService.SendEmailMessageAsync(emailMessage);
 
-            return NoContent();
+            return Ok();
         }
     }
 }

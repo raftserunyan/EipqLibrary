@@ -98,7 +98,7 @@ namespace EipqLibrary.Infrastructure.Business.Services
 
             if (entity.RequestStatus != Domain.Core.Enums.BookCreationRequestStatus.Pending)
             {
-                throw BadRequest("You can not edit a request which is already approved/rejected");
+                throw BadRequest("You can not delete a request which is already approved/rejected");
             }
 
             _uow.BookCreationRequestRepository.Delete(entity);

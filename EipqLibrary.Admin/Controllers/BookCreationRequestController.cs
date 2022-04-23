@@ -106,7 +106,7 @@ namespace EipqLibrary.Admin.Controllers
 
         [HttpPost("{requestId}/confirm")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<IActionResult> Confirm(int requestId, [FromBody] BookCreationRequestAccountantMessage accountantNote)
+        public async Task<IActionResult> Confirm(int requestId, [FromBody] BookManipulationAccountantMessage accountantNote)
         {
             var accountantAction = new BookCreationRequestAccountantAction
             {
@@ -121,7 +121,7 @@ namespace EipqLibrary.Admin.Controllers
 
         [HttpPost("{requestId}/reject")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<IActionResult> Reject(int requestId, [FromBody] BookCreationRequestAccountantMessage accountantNote)
+        public async Task<IActionResult> Reject(int requestId, [FromBody] BookManipulationAccountantMessage accountantNote)
         {
             var accountantAction = new BookCreationRequestAccountantAction
             {

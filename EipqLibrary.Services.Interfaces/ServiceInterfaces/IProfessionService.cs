@@ -9,6 +9,7 @@ namespace EipqLibrary.Services.Interfaces.ServiceInterfaces
     {
         Task<bool> ExistsAsync(int professionId);
         Task<ProfessionModel> Create(ProfessionCreationRequest professionCreationRequest);
+        Task<ProfessionModel> UpdateAsync(ProfessionUpdateRequest professionUpdateRequest);
         Task<ProfessionModel> GetByIdAsync(int id);
         Task<List<ProfessionModel>> GetAllAsync();
     }

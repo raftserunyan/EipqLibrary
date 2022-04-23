@@ -39,5 +39,12 @@ namespace EipqLibrary.Admin.Controllers
         {
             return Ok(await _professionService.Create(professionCreationRequest));
         }
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(typeof(ProfessionModel), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> Create(int id, ProfessionUpdateRequest professionUpdateRequest)
+        {
+            return Ok(await _professionService.UpdateAsync(professionUpdateRequest));
+        }
     }
 }

@@ -148,6 +148,7 @@ namespace EipqLibrary.Admin
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IReservationService, ReservationService>();
+            services.AddScoped<IBookDeletionService, BookDeletionService>();
 
             // Email Service
             services.AddEmailService();

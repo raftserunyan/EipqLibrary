@@ -7,7 +7,6 @@ using EipqLibrary.Services.DTOs.RequestModels;
 using EipqLibrary.Services.Interfaces.ServiceInterfaces;
 using EipqLibrary.Shared.Utils.Extensions;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -141,9 +140,9 @@ namespace EipqLibrary.Infrastructure.Business.Services
             return pagedReservations;
         }
 
-        public async Task<PagedData<Reservation>> GetMyReservationsAsync(PageInfo pageInfo, ReservationSortOption reservationSort, ReservationStatus? status, string userId)
+        public async Task<PagedData<Reservation>> GetReservationsByUserIdAsync(string userId, PageInfo pageInfo, ReservationSortOption reservationSort, ReservationStatus? status)
         {
-            var pagedReservations = await _uow.ReservationRepository.GetMyReservationsAsync(pageInfo, reservationSort, userId, status);
+            var pagedReservations = await _uow.ReservationRepository.GetReservationsByUserIdAsync(userId, pageInfo, reservationSort, status);
             EnsureExists(pagedReservations);
 
             return pagedReservations;
