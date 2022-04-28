@@ -66,7 +66,7 @@ namespace EipqLibrary.Infrastructure.Business.Services
         {
             if (!_tokenService.TryGetPrincipalFromToken(request.Token, out var principal))
             {
-                throw InvalidTokenException();
+                throw GetInvalidAccessTokenException();
             }
 
             var userId = _tokenService.GetUserId(principal);
@@ -74,7 +74,7 @@ namespace EipqLibrary.Infrastructure.Business.Services
 
             if (!await _refreshTokenService.ExistsUnexpiredForDevice(request.RefreshToken, deviceId))
             {
-                throw InvalidTokenException();
+                throw GetInvalidRefreshTokenException();
             }
 
             var user = await _userManager.FindByIdAsync(userId);
@@ -130,7 +130,8 @@ namespace EipqLibrary.Infrastructure.Business.Services
                 Token = tokenInfo.Token,
                 TokenExpiryDate = tokenInfo.ExpiryDate,
                 RefreshToken = refreshTokenInfo.Token,
-                RefreshTokenExpiryDate = refreshTokenInfo.ExpiryDate
+                RefreshTokenExpiryDate = refreshTokenInfo.ExpiryDate,
+                Role = (int)user.Occupation
             };
         }
         private async Task<UserTokenInfo> ConvertUserToTokenInfo(AdminUser user)
@@ -143,7 +144,9 @@ namespace EipqLibrary.Infrastructure.Business.Services
         }
 
         private Exception DisabledAdminException() => new AuthenticationException("Մուտքը ձախողվեց քանի որ ձեր հաշիվը ապաակտիվացված է");
-        private Exception InvalidTokenException() => new AuthenticationException("Invalid-token");
+        private Exception GetInvalidRefreshTokenException() => new AuthenticationException("Invalid refresh token");
+        private Exception GetInvalidAccessTokenException() => new AuthenticationException("Invalid access token");
+        //private Exception GetInvalidTokenException() => new AuthenticationException("Invalid token");
         private Exception InvalidCredentialsException() => new BadDataException("Մուտքագրված մուտքանունը և/կամ ծածկագիրը սխալ է");
         private Exception IncorrectPWD() => new BadDataException("Ընթացիկ գաղտնաբառը սխալ է");
     }

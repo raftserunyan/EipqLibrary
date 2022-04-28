@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using System;
 using System.Dynamic;
 using System.Net;
+using System.Security.Authentication;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -51,7 +52,12 @@ namespace EipqLibrary.Admin.Infrastructure
                             responseBody.errorMessage = e.Message;
                             response.StatusCode = (int)HttpStatusCode.Unauthorized;
                             break;
-                        }                        
+                        }
+                    case AuthenticationException e:
+                        {
+                            response.StatusCode = (int)HttpStatusCode.BadRequest;
+                            break;
+                        }
                     default:
                         // unhandled error
                         response.StatusCode = (int)HttpStatusCode.InternalServerError;

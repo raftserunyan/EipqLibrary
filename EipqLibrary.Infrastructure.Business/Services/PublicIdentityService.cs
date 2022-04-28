@@ -133,7 +133,7 @@ namespace EipqLibrary.Infrastructure.Business.Services
         {
             if (!_tokenService.TryGetPrincipalFromToken(request.Token, out var principal))
             {
-                throw GetInvalidTokenException();
+                throw GetInvalidAccessTokenException();
             }
 
             var userId = _tokenService.GetUserId(principal);
@@ -142,7 +142,7 @@ namespace EipqLibrary.Infrastructure.Business.Services
 
             if (!await _refreshTokenService.ExistsUnexpiredForTokenAndDevice(request.RefreshToken, jti, deviceId))
             {
-                throw GetInvalidTokenException();
+                throw GetInvalidRefreshTokenException();
             }
 
             var user = await _userManager.FindByIdAsync(userId);
@@ -191,7 +191,7 @@ namespace EipqLibrary.Infrastructure.Business.Services
                 return user.Email;
             }
 
-            throw GetInvalidTokenException();
+            throw GetInvalidRefreshTokenException();
         }
 
         public async Task<IdentityResult> ResetPassword(ResetPasswordRequest request)
@@ -248,7 +248,8 @@ namespace EipqLibrary.Infrastructure.Business.Services
                 TokenExpiryDate = tokenInfo.ExpiryDate,
                 RefreshToken = refreshTokenInfo.Token,
                 RefreshTokenExpiryDate = refreshTokenInfo.ExpiryDate,
-                UserFirstName = user.FirstName
+                UserFirstName = user.FirstName,
+                Role = 3
             };
         }
         private UserTokenInfo ConvertUserToTokenInfo(User user)
@@ -294,7 +295,9 @@ namespace EipqLibrary.Infrastructure.Business.Services
         {
             return new BadDataException("Մուտքագրված մուտքանունը և/կամ ծածկագիրը սխալ է");
         }
-        private Exception GetInvalidTokenException() => new AuthenticationException("Invalid-token");
+        private Exception GetInvalidRefreshTokenException() => new AuthenticationException("Invalid refresh token");
+        private Exception GetInvalidAccessTokenException() => new AuthenticationException("Invalid access token");
+        private Exception GetInvalidTokenException() => new AuthenticationException("Invalid token");
         private Exception IncorrectPWD() => new BadDataException("Ընթացիկ գաղտնաբառը սխալ է");
         private Exception InvalidEmail() => new BadDataException("Էլ․ հասցեն սխալ է");
     }

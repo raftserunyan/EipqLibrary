@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Dynamic;
 using System.Net;
+using System.Security.Authentication;
 using System.Text.Json;
 using System.Threading.Tasks;
 using EipqLibrary.Shared.CustomExceptions;
@@ -50,6 +51,11 @@ namespace EipqLibrary.API.Infrastructure
                         {
                             responseBody.errorMessage = e.Message;
                             response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                            break;
+                        }
+                    case AuthenticationException e:
+                        {
+                            response.StatusCode = (int)HttpStatusCode.BadRequest;
                             break;
                         }
                     default:
