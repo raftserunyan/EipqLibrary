@@ -17,6 +17,9 @@ namespace EipqLibrary.Services.DTOs.Models
 
         public ReservationStatus Status { get; set; }
 
+        public string BookAuthor { get; set; }
+        public string BookName { get; set; }
+
         public BookModel Book { get; set; }
 
         public UserModel User { get; set; }

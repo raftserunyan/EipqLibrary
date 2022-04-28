@@ -4,14 +4,16 @@ using EipqLibrary.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EipqLibrary.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(EipqLibraryDbContext))]
-    partial class EipqLibraryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220428185235_BookName_And_BookAuthor_Added_To_Reservation")]
+    partial class BookName_And_BookAuthor_Added_To_Reservation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -442,8 +444,8 @@ namespace EipqLibrary.Infrastructure.Data.Migrations
                     b.Property<int>("GroupId")
                         .HasColumnType("int");
 
-                    b.Property<string>("GroupNumber")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("GroupNumber")
+                        .HasColumnType("int");
 
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");

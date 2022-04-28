@@ -117,6 +117,8 @@ namespace EipqLibrary.Infrastructure.Business.Services
             var newReservation = _mapper.Map<Reservation>(request);
             newReservation.UserId = user.Id;
             newReservation.BookInstanceId = availableBookInstance.Id;
+            newReservation.BookName = book.Name;
+            newReservation.BookAuthor = book.Author;
 
             availableBookInstance.Borrowings.Add(newReservation);
             await _uow.SaveChangesAsync();

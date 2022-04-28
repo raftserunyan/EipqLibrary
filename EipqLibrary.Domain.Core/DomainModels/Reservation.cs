@@ -16,6 +16,9 @@ namespace EipqLibrary.Domain.Core.DomainModels
 
         public ReservationStatus Status { get; set; } = ReservationStatus.Reserved;
 
+        public string BookName { get; set; }
+        public string BookAuthor { get; set; }
+
         public string UserId { get; set; }
         public User User { get; set; }
 
