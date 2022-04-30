@@ -34,6 +34,7 @@ namespace EipqLibrary.Admin.Controllers
             return Ok(authResponse);
         }
 
+        [AllowAnonymous]
         [HttpPost("refresh")]
         [ProducesResponseType(typeof(AuthenticationResponse), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Refresh([FromBody] RefreshTokenRequest request)

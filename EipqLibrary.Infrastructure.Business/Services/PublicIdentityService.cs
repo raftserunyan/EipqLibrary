@@ -249,6 +249,7 @@ namespace EipqLibrary.Infrastructure.Business.Services
                 RefreshToken = refreshTokenInfo.Token,
                 RefreshTokenExpiryDate = refreshTokenInfo.ExpiryDate,
                 UserFirstName = user.FirstName,
+                DisplayName = user.FirstName + " " + user.LastName,
                 Role = 3
             };
         }

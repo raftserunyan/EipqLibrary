@@ -4,6 +4,9 @@ using EipqLibrary.Services.DTOs.RequestModels;
 using EipqLibrary.Services.Interfaces.ServiceInterfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -48,6 +51,38 @@ namespace EipqLibrary.Admin.Controllers
             }
 
             return Ok(response);
+        }
+
+        [HttpPost("getUserRoleByToken")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetUserRole([FromBody] GetUserRoleByTokenRequest request)
+        {
+            var response = new IsUserAdminResponse();
+            response.IsUserAdmin = IsUserAdmin(request.Token);            
+
+            return Ok(response);
+        }
+
+        // Private methods
+        private bool IsUserAdmin(string accessToken)
+        {
+            var handler = new JwtSecurityTokenHandler();
+
+            SecurityToken jsonToken;
+            try
+            {
+                jsonToken = handler.ReadToken(accessToken);
+            }
+            catch (System.Exception)
+            {
+                throw new Shared.CustomExceptions.BadDataException("Invalid access token");
+            }
+
+            var tokenS = jsonToken as JwtSecurityToken;
+
+            var role = tokenS.Claims.FirstOrDefault(claim => claim.Type == "role")?.Value;
+
+            return !(role is null);
         }
     }
 }
