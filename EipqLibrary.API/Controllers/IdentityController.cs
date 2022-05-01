@@ -6,6 +6,7 @@ using EipqLibrary.Shared.Web.Dtos.Tokens;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace EipqLibrary.API.Controllers
@@ -46,7 +47,9 @@ namespace EipqLibrary.API.Controllers
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> ChangePassword(ChangePasswordRequest request)
         {
-            return Ok(await _identityService.ChangePassword(request));
+            var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            return Ok(await _identityService.ChangePassword(currentUserId, request));
         }
 
         [AllowAnonymous]

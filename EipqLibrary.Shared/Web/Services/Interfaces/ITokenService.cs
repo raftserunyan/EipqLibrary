@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using EipqLibrary.Shared.Web.Dtos.Tokens;
 
 namespace EipqLibrary.Shared.Web.Services.Interfaces
@@ -10,6 +11,7 @@ namespace EipqLibrary.Shared.Web.Services.Interfaces
         public string GetUserId(ClaimsPrincipal principal);
         string GetDeviceId(ClaimsPrincipal principal);
         public string GetTokenJti(ClaimsPrincipal principal);
+        public JwtSecurityToken DecodeToken(string token);
         public string CurrentTokenJti { get; }
         public string CurrentDeviceId { get; }
     }

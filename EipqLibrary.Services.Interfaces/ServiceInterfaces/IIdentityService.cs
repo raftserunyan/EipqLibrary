@@ -12,6 +12,6 @@ namespace EipqLibrary.Services.Interfaces.ServiceInterfaces
         Task<AuthenticationResponse> RefreshToken(RefreshTokenRequest request);
         Task<UserActiveTokensResponse> ActiveTokensCount();
         Task Logout();
-        Task<IdentityResult> ChangePassword(ChangePasswordRequest request);
+        Task<IdentityResult> ChangePassword(string userId, ChangePasswordRequest request);
     }
 }

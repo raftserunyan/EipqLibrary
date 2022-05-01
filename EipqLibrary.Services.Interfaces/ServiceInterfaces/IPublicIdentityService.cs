@@ -11,7 +11,7 @@ namespace EipqLibrary.Services.Interfaces.ServiceInterfaces
     {
         Task<RegistrationResponse> Register(RegistrationRequest request);
         Task<AuthenticationResponse> Login(AuthenticationRequest request);
-        Task<IdentityResult> ChangePassword(ChangePasswordRequest request);
+        Task<IdentityResult> ChangePassword(string userId, ChangePasswordRequest request);
         Task<AuthenticationResponse> RefreshToken(RefreshTokenRequest request);
         Task Logout();
         Task ResetPasswordToken(string email);

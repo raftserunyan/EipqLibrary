@@ -133,6 +133,29 @@ namespace EipqLibrary.Shared.Web.Services
             return principal.FindFirstValue("deviceId");
         }
 
+        public JwtSecurityToken DecodeToken(string token)
+        {
+            var handler = new JwtSecurityTokenHandler();
+
+            SecurityToken jsonToken;
+            try
+            {
+                jsonToken = handler.ReadToken(token);
+            }
+            catch (Exception)
+            {
+                throw new CustomExceptions.BadDataException("Invalid access token");
+            }
+
+            var tokenS = jsonToken as JwtSecurityToken;
+            if (tokenS == null)
+            {
+                throw new InvalidOperationException("Unable to parse the given token");
+            }
+
+            return tokenS;
+        }
+
         public string CurrentUserId => GetUserId(_httpContextAccessor?.HttpContext?.User);
 
         public string CurrentDeviceId => GetDeviceId(_httpContextAccessor?.HttpContext?.User);

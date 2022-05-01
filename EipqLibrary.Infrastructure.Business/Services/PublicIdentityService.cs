@@ -112,12 +112,12 @@ namespace EipqLibrary.Infrastructure.Business.Services
             return authResponse;
         }
 
-        public async Task<IdentityResult> ChangePassword(ChangePasswordRequest request)
+        public async Task<IdentityResult> ChangePassword(string userId, ChangePasswordRequest request)
         {
-            var user = await _userManager.FindByEmailAsync(request.Email);
+            var user = await _userManager.FindByIdAsync(userId);
             if (user is null)
             {
-                throw GetInvalidCredentialsException();
+                throw new BadDataException("Չհաջողվեց գտնել ընթացիկ օգտագործողին");
             }
 
             if (!_userManager.CheckPasswordAsync(user, request.Password).Result)

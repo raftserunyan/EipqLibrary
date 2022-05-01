@@ -2,6 +2,7 @@
 using EipqLibrary.Services.DTOs.Models;
 using EipqLibrary.Services.DTOs.RequestModels;
 using EipqLibrary.Services.Interfaces.ServiceInterfaces;
+using EipqLibrary.Shared.Web.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -18,12 +19,15 @@ namespace EipqLibrary.Admin.Controllers
     {
         private readonly IUserService _userService;
         private readonly IAdminIdentityService _adminService;
+        private readonly ITokenService _tokenService;
 
         public UserRoleController(IAdminIdentityService adminService,
-                                  IUserService userService)
+                                  IUserService userService,
+                                  ITokenService tokenService)
         {
             _adminService = adminService;
             _userService = userService;
+            _tokenService = tokenService;
         }
 
         [HttpPost("getUserRole")]
@@ -66,19 +70,7 @@ namespace EipqLibrary.Admin.Controllers
         // Private methods
         private bool IsUserAdmin(string accessToken)
         {
-            var handler = new JwtSecurityTokenHandler();
-
-            SecurityToken jsonToken;
-            try
-            {
-                jsonToken = handler.ReadToken(accessToken);
-            }
-            catch (System.Exception)
-            {
-                throw new Shared.CustomExceptions.BadDataException("Invalid access token");
-            }
-
-            var tokenS = jsonToken as JwtSecurityToken;
+            var tokenS = _tokenService.DecodeToken(accessToken);
 
             var role = tokenS.Claims.FirstOrDefault(claim => claim.Type == "role")?.Value;
 
