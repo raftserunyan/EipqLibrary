@@ -131,7 +131,8 @@ namespace EipqLibrary.Infrastructure.Business.Services
                 TokenExpiryDate = tokenInfo.ExpiryDate,
                 RefreshToken = refreshTokenInfo.Token,
                 RefreshTokenExpiryDate = refreshTokenInfo.ExpiryDate,
-                Role = (int)user.Occupation
+                Role = (int)user.Occupation,
+                DisplayName = user.FirstName + " " + user.LastName
             };
         }
         private async Task<UserTokenInfo> ConvertUserToTokenInfo(AdminUser user)
