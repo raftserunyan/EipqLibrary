@@ -1,4 +1,6 @@
-﻿using EipqLibrary.Services.DTOs.Models;
+﻿using EipqLibrary.Admin.Attributes;
+using EipqLibrary.Domain.Core.Constants.Admins;
+using EipqLibrary.Services.DTOs.Models;
 using EipqLibrary.Services.DTOs.RequestModels;
 using EipqLibrary.Services.Interfaces.ServiceInterfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +21,7 @@ namespace EipqLibrary.Admin.Controllers
             _groupService = groupService;
         }
 
+        [AuthorizeRoles(AdminRoleNames.SuperAdmin, AdminRoleNames.Librarian, AdminRoleNames.Accountant)]
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(GroupModel), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetById(int id)
@@ -26,6 +29,7 @@ namespace EipqLibrary.Admin.Controllers
             return Ok(await _groupService.GetByIdAsync(id, true));
         }
 
+        [AuthorizeRoles(AdminRoleNames.SuperAdmin, AdminRoleNames.Librarian, AdminRoleNames.Accountant)]
         [HttpGet]
         [ProducesResponseType(typeof(List<GroupModel>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetAll()
@@ -33,6 +37,7 @@ namespace EipqLibrary.Admin.Controllers
             return Ok(await _groupService.GetAllAsync(true));
         }
 
+        [AuthorizeRoles(AdminRoleNames.SuperAdmin, AdminRoleNames.Librarian)]
         [HttpPost]
         [ProducesResponseType(typeof(GroupModel), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Create(GroupCreationRequest groupCreationRequest)

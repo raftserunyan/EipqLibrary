@@ -79,6 +79,7 @@ namespace EipqLibrary.API.Controllers
             return Ok();
         }
 
+        // Private methods
         private async Task<User> GetCurrentStudentUserAsync()
         {
             var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;

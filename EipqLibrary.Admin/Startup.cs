@@ -7,6 +7,7 @@ using EipqLibrary.Infrastructure.Business.Services;
 using EipqLibrary.Infrastructure.Data;
 using EipqLibrary.Services.DTOs.MapperProfiles;
 using EipqLibrary.Services.Interfaces.ServiceInterfaces;
+using EipqLibrary.Shared.Models;
 using EipqLibrary.Shared.SharedSettings;
 using EipqLibrary.Shared.SharedSettings.Interfaces;
 using EipqLibrary.Shared.Web.Services;
@@ -156,6 +157,11 @@ namespace EipqLibrary.Admin
             var emailSettings = new EmailSettings();
             Configuration.GetSection("EmailSettings").Bind(emailSettings);
             services.AddSingleton(emailSettings);
+
+            // Token settings
+            var tokenSettings = new TokenSettings();
+            Configuration.GetSection("TokenSettings").Bind(tokenSettings);
+            services.AddSingleton(tokenSettings);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

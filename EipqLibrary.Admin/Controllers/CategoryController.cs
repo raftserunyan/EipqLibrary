@@ -1,4 +1,6 @@
-﻿using EipqLibrary.Services.DTOs.Models;
+﻿using EipqLibrary.Admin.Attributes;
+using EipqLibrary.Domain.Core.Constants.Admins;
+using EipqLibrary.Services.DTOs.Models;
 using EipqLibrary.Services.DTOs.RequestModels;
 using EipqLibrary.Services.Interfaces.ServiceInterfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +20,7 @@ namespace EipqLibrary.Admin.Controllers
             _categoryService = categoryService;
         }
 
+        [AuthorizeRoles(AdminRoleNames.SuperAdmin, AdminRoleNames.Librarian)]
         [HttpPut]
         [ProducesResponseType(typeof(CategoryModel), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Update([FromBody] CategoryUpdateRequest categoryUpdateRequest)
@@ -26,6 +29,7 @@ namespace EipqLibrary.Admin.Controllers
             return Ok(updatedCategory);
         }
 
+        [AuthorizeRoles(AdminRoleNames.SuperAdmin, AdminRoleNames.Librarian)]
         [HttpPost]
         [ProducesResponseType(typeof(int), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Post([FromBody] CategoryCreationRequest categoryCreationRequest)
@@ -34,6 +38,7 @@ namespace EipqLibrary.Admin.Controllers
             return Ok(new { categoryId = entityId });
         }
 
+        [AuthorizeRoles(AdminRoleNames.SuperAdmin, AdminRoleNames.Librarian)]
         [HttpDelete("{categoryId}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<IActionResult> Delete(int categoryId)

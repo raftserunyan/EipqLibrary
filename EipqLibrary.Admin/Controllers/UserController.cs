@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using EipqLibrary.Admin.Attributes;
 using EipqLibrary.Domain.Core.AggregatedEntities;
+using EipqLibrary.Domain.Core.Constants.Admins;
 using EipqLibrary.Domain.Core.Enums;
 using EipqLibrary.EmailService.Interfaces;
 using EipqLibrary.Services.DTOs.Models;
@@ -12,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace EipqLibrary.Admin.Controllers
 {
+    [AuthorizeRoles(AdminRoleNames.SuperAdmin, AdminRoleNames.Librarian)]
     [Route("api/admin/users")]
     [ApiController]
     public class UserController : ControllerBase
@@ -28,7 +31,7 @@ namespace EipqLibrary.Admin.Controllers
             _emailService = emailService;
             _mapper = mapper;
         }
-
+        
         [HttpGet]
         [ProducesResponseType(typeof(PagedData<UserModel>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.OK)]

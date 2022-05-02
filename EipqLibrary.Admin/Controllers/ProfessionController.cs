@@ -1,4 +1,6 @@
-﻿using EipqLibrary.Services.DTOs.Models;
+﻿using EipqLibrary.Admin.Attributes;
+using EipqLibrary.Domain.Core.Constants.Admins;
+using EipqLibrary.Services.DTOs.Models;
 using EipqLibrary.Services.DTOs.RequestModels;
 using EipqLibrary.Services.Interfaces.ServiceInterfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -33,6 +35,7 @@ namespace EipqLibrary.Admin.Controllers
             return Ok(await _professionService.GetAllAsync());
         }
 
+        [AuthorizeRoles(AdminRoleNames.SuperAdmin, AdminRoleNames.Librarian)]
         [HttpPost]
         [ProducesResponseType(typeof(ProfessionModel), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Create(ProfessionCreationRequest professionCreationRequest)
@@ -40,6 +43,7 @@ namespace EipqLibrary.Admin.Controllers
             return Ok(await _professionService.Create(professionCreationRequest));
         }
 
+        [AuthorizeRoles(AdminRoleNames.SuperAdmin, AdminRoleNames.Librarian)]
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(ProfessionModel), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Create(int id, ProfessionUpdateRequest professionUpdateRequest)

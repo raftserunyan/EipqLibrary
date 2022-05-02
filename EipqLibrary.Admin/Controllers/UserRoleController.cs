@@ -1,18 +1,18 @@
-﻿using EipqLibrary.Domain.Core.Enums;
+﻿using EipqLibrary.Admin.Attributes;
+using EipqLibrary.Domain.Core.Constants.Admins;
+using EipqLibrary.Domain.Core.Enums;
 using EipqLibrary.Services.DTOs.Models;
 using EipqLibrary.Services.DTOs.RequestModels;
 using EipqLibrary.Services.Interfaces.ServiceInterfaces;
 using EipqLibrary.Shared.Web.Services.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
 namespace EipqLibrary.Admin.Controllers
 {
+    [AuthorizeRoles(AdminRoleNames.SuperAdmin, AdminRoleNames.Librarian, AdminRoleNames.Accountant)]
     [Route("api/")]
     [ApiController]
     public class UserRoleController : ControllerBase

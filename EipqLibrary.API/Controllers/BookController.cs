@@ -1,11 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Net;
-using System.Threading.Tasks;
-using EipqLibrary.Domain.Core.AggregatedEntities;
+﻿using EipqLibrary.Domain.Core.AggregatedEntities;
 using EipqLibrary.Services.DTOs.Models;
-using EipqLibrary.Services.DTOs.RequestModels;
 using EipqLibrary.Services.Interfaces.ServiceInterfaces;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace EipqLibrary.API.Controllers
 {
@@ -33,13 +31,5 @@ namespace EipqLibrary.API.Controllers
         {
             return Ok(await _bookService.GetByIdAsync(bookId));
         }
-
-        //[HttpPost]
-        //[ProducesResponseType((int)HttpStatusCode.Created)]
-        //public async Task<IActionResult> Post([FromBody] BookAdditionRequest bookCreationRequest)
-        //{
-        //    int entityId = await _bookService.CreateBook(bookCreationRequest);
-        //    return CreatedAtAction(nameof(GetById), new { bookId = entityId }, new { bookId = entityId });
-        //}
     }
 }

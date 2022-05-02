@@ -24,6 +24,7 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Text;
 using EipqLibrary.API.Extensions;
+using EipqLibrary.Shared.Models;
 
 namespace EipqLibrary.API
 {
@@ -155,6 +156,11 @@ namespace EipqLibrary.API
             var emailSettings = new EmailSettings();
             Configuration.GetSection("EmailSettings").Bind(emailSettings);
             services.AddSingleton(emailSettings);
+
+            // Token settings
+            var tokenSettings = new TokenSettings();
+            Configuration.GetSection("TokenSettings").Bind(tokenSettings);
+            services.AddSingleton(tokenSettings);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

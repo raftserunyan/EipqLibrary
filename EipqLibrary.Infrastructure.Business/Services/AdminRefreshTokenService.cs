@@ -2,6 +2,7 @@
 using EipqLibrary.Domain.Interfaces.EFInterfaces;
 using EipqLibrary.Services.DTOs.Models.Tokens;
 using EipqLibrary.Services.Interfaces.ServiceInterfaces;
+using EipqLibrary.Shared.Models;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,11 +11,15 @@ namespace EipqLibrary.Infrastructure.Business.Services
 {
     public class AdminRefreshTokenService : IAdminRefreshTokenService
     {
+        private readonly TokenSettings _tokenSettings;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRefreshTokenRepository _refreshTokenRepository;
 
-        public AdminRefreshTokenService(IUnitOfWork unitOfWork, IRefreshTokenRepository refreshTokenRepository)
+        public AdminRefreshTokenService(TokenSettings tokenSettings,
+                                        IUnitOfWork unitOfWork, 
+                                        IRefreshTokenRepository refreshTokenRepository)
         {
+            _tokenSettings = tokenSettings;
             _unitOfWork = unitOfWork;
             _refreshTokenRepository = refreshTokenRepository;
         }
@@ -35,7 +40,7 @@ namespace EipqLibrary.Infrastructure.Business.Services
                 UserId = userId,
                 DeviceId = deviceId,
                 CreationDate = DateTime.UtcNow,
-                ExpiryDate = DateTime.UtcNow.AddMonths(1)
+                ExpiryDate = DateTime.UtcNow.AddDays(_tokenSettings.AdminRefreshTokenLifetimeInDays)
             };
 
             await _refreshTokenRepository.Add(token);

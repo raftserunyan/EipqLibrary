@@ -1,4 +1,6 @@
-﻿using EipqLibrary.Services.DTOs.Models;
+﻿using EipqLibrary.Admin.Attributes;
+using EipqLibrary.Domain.Core.Constants.Admins;
+using EipqLibrary.Services.DTOs.Models;
 using EipqLibrary.Services.DTOs.RequestModels;
 using EipqLibrary.Services.Interfaces.ServiceInterfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +20,7 @@ namespace EipqLibrary.Admin.Controllers
             _bookService = bookService;
         }
 
+        [AuthorizeRoles(AdminRoleNames.SuperAdmin, AdminRoleNames.Librarian)]
         [HttpPut]
         [ProducesResponseType(typeof(BookModel), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Update([FromBody]BookUpdateRequest bookUpdateRequest)
@@ -26,14 +29,5 @@ namespace EipqLibrary.Admin.Controllers
 
             return Ok();
         }
-
-        //[HttpDelete("{bookId}")]
-        //[ProducesResponseType((int)HttpStatusCode.OK)]
-        //public async Task<IActionResult> Delete(int bookId)
-        //{
-        //    await _bookService.DeleteAsync(bookId);
-
-        //    return Ok();
-        //}
     }
 }

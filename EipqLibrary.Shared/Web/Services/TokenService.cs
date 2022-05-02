@@ -4,6 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using EipqLibrary.Shared.Models;
 using EipqLibrary.Shared.SharedSettings;
 using EipqLibrary.Shared.Web.Dtos.Tokens;
 using EipqLibrary.Shared.Web.Services.Interfaces;
@@ -15,15 +16,18 @@ namespace EipqLibrary.Shared.Web.Services
     public class TokenService : ITokenService
     {
         private readonly JwtSettings _jwtSettings;
+        private readonly TokenSettings _tokenSettings;
         private readonly TokenValidationParameters _tokenValidationParameters;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public TokenService(
             JwtSettings jwtSettings,
+            TokenSettings tokenSettings,
             TokenValidationParameters tokenValidationParameters,
             IHttpContextAccessor httpContextAccessor)
         {
             _jwtSettings = jwtSettings;
+            _tokenSettings = tokenSettings;
             _tokenValidationParameters = tokenValidationParameters.Clone();
             _tokenValidationParameters.ValidateLifetime = false;
             _httpContextAccessor = httpContextAccessor;
@@ -49,7 +53,7 @@ namespace EipqLibrary.Shared.Web.Services
 
         public TokenInfo CreateToken(UserTokenInfo user, string deviceId, string loginProvider = null)
         {
-            var expiryDate = DateTime.UtcNow.AddMinutes(60);
+            var expiryDate = DateTime.UtcNow.AddMinutes(_tokenSettings.AccessTokenLifetimeInMinutes);
             var tokenId = Guid.NewGuid().ToString();
 
             var claims = GetClaimsForUser(user);

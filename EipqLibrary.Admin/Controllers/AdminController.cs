@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using EipqLibrary.Admin.Attributes;
 using EipqLibrary.Domain.Core.AggregatedEntities;
+using EipqLibrary.Domain.Core.Constants.Admins;
 using EipqLibrary.Services.DTOs.Models;
 using EipqLibrary.Services.DTOs.RequestModels;
 using EipqLibrary.Services.Interfaces.ServiceInterfaces;
@@ -28,6 +30,7 @@ namespace EipqLibrary.Admin.Controllers
             _userService = userService;
         }
 
+        [AuthorizeRoles(AdminRoleNames.SuperAdmin)]
         [HttpPost]
         [ProducesResponseType(typeof(AdminUserModel), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> CreateAdmin(AdminCreationRequest adminCreationRequest)
@@ -43,6 +46,7 @@ namespace EipqLibrary.Admin.Controllers
             return Ok(admin);
         }
 
+        [AuthorizeRoles(AdminRoleNames.SuperAdmin)]
         [HttpPut("changestatus")]
         [ProducesResponseType((int)HttpStatusCode.Accepted)]
         public async Task<IActionResult> ChangeAdminStatus(AdminChangeStatusRequest adminUpdateModel)
@@ -52,6 +56,7 @@ namespace EipqLibrary.Admin.Controllers
             return Ok();
         }
 
+        [AuthorizeRoles(AdminRoleNames.SuperAdmin)]
         [HttpDelete]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         public async Task<IActionResult> DeleteAdmin(AdminDeletionRequest adminDeletionModel)
@@ -61,6 +66,7 @@ namespace EipqLibrary.Admin.Controllers
             return NoContent();
         }
 
+        [AuthorizeRoles(AdminRoleNames.SuperAdmin, AdminRoleNames.Accountant, AdminRoleNames.Librarian)]
         [HttpGet("{email}")]
         [ProducesResponseType(typeof(AdminInfo), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetAdminByEmail(string email)
@@ -69,6 +75,7 @@ namespace EipqLibrary.Admin.Controllers
             return Ok(admin);
         }
 
+        [AuthorizeRoles(AdminRoleNames.SuperAdmin)]
         [HttpGet]
         [ProducesResponseType(typeof(PagedData<AdminInfo>), (int)HttpStatusCode.OK)]
         public IActionResult GetAll([FromQuery] PageInfo pageInfo)

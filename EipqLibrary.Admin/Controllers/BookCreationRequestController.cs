@@ -1,4 +1,6 @@
-﻿using EipqLibrary.Domain.Core.AggregatedEntities;
+﻿using EipqLibrary.Admin.Attributes;
+using EipqLibrary.Domain.Core.AggregatedEntities;
+using EipqLibrary.Domain.Core.Constants.Admins;
 using EipqLibrary.Domain.Core.Enums;
 using EipqLibrary.Services.DTOs.Models;
 using EipqLibrary.Services.DTOs.RequestModels;
@@ -25,6 +27,7 @@ namespace EipqLibrary.Admin.Controllers
             _bookService = bookService;
         }
 
+        [AuthorizeRoles(AdminRoleNames.SuperAdmin, AdminRoleNames.Librarian)]
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<IActionResult> Post([FromBody] BookAdditionRequest bookCreationRequest)
@@ -72,6 +75,7 @@ namespace EipqLibrary.Admin.Controllers
             return Ok(new { bookCreationRequestId = entityId });
         }
 
+        [AuthorizeRoles(AdminRoleNames.SuperAdmin, AdminRoleNames.Librarian, AdminRoleNames.Accountant)]
         [HttpGet]
         [ProducesResponseType(typeof(PagedData<BookCreationRequestModel>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetAll([FromQuery] PageInfo pageInfo, [FromQuery] BCRSortOption sort, [FromQuery] BookCreationRequestStatus? status)
@@ -80,6 +84,7 @@ namespace EipqLibrary.Admin.Controllers
             return Ok(requests);
         }
 
+        [AuthorizeRoles(AdminRoleNames.SuperAdmin, AdminRoleNames.Librarian, AdminRoleNames.Accountant)]
         [HttpGet("{requestId}")]
         [ProducesResponseType(typeof(BookCreationRequestModel), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> Get(int requestId)
@@ -88,6 +93,7 @@ namespace EipqLibrary.Admin.Controllers
             return Ok(request);
         }
 
+        [AuthorizeRoles(AdminRoleNames.SuperAdmin, AdminRoleNames.Librarian, AdminRoleNames.Accountant)]
         [HttpPut]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<IActionResult> Update([FromBody] UpdateBookCreationRequest updateRequest)
@@ -96,6 +102,7 @@ namespace EipqLibrary.Admin.Controllers
             return Ok(updatedEntity);
         }
 
+        [AuthorizeRoles(AdminRoleNames.SuperAdmin, AdminRoleNames.Librarian)]
         [HttpDelete("{requestId}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<IActionResult> Delete(int requestId)
@@ -104,6 +111,7 @@ namespace EipqLibrary.Admin.Controllers
             return Ok();
         }
 
+        [AuthorizeRoles(AdminRoleNames.SuperAdmin, AdminRoleNames.Accountant)]
         [HttpPost("{requestId}/confirm")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<IActionResult> Confirm(int requestId, [FromBody] BookManipulationAccountantMessage accountantNote)
@@ -119,6 +127,7 @@ namespace EipqLibrary.Admin.Controllers
             return Ok();
         }
 
+        [AuthorizeRoles(AdminRoleNames.SuperAdmin, AdminRoleNames.Accountant)]
         [HttpPost("{requestId}/reject")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<IActionResult> Reject(int requestId, [FromBody] BookManipulationAccountantMessage accountantNote)
