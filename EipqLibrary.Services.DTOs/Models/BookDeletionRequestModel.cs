@@ -10,6 +10,7 @@ namespace EipqLibrary.Services.DTOs.Models
 
         public int Count { get; set; }
         public DeletionReason DeletionReason { get; set; }
+        public BookDeletionRequestStatus Status { get; set; }
         public string Note { get; set; }
 
         public string BookName { get; set; }

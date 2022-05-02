@@ -9,7 +9,7 @@ namespace EipqLibrary.Services.DTOs.Models
         public string Lastname { get; set; }
         public UserStatus Status { get; set; }
         public string StudentCardNumber { get; set; }
-        public int GroupNumber { get; set; }
+        public string GroupNumber { get; set; }
         public string Email { get; set; }
 
         public GroupModel Group { get; set; }
