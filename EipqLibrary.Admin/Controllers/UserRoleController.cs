@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 
 namespace EipqLibrary.Admin.Controllers
 {
-    [AuthorizeRoles(AdminRoleNames.SuperAdmin, AdminRoleNames.Librarian, AdminRoleNames.Accountant)]
     [Route("api/")]
     [ApiController]
     public class UserRoleController : ControllerBase
