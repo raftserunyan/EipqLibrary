@@ -26,7 +26,7 @@ namespace EipqLibrary.Infrastructure.Business.Services
         {
             if (await _unitOfWork.ProfessionRepository.ExistsAsync(x => x.Name == professionCreationRequest.Name))
             {
-                throw new BadDataException($"A profession with name '{professionCreationRequest.Name}' already exists");
+                throw new BadDataException($"'{professionCreationRequest.Name}' անվանմամբ մասնագիտություն արդեն կա");
             }
 
             var profession = _mapper.Map<Profession>(professionCreationRequest);

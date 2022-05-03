@@ -38,7 +38,7 @@ namespace EipqLibrary.Infrastructure.Business.Services
         public async Task<BookModel> GetByIdAsync(int bookId)
         {
             var book = await _unitOfWork.BookRepository.GetByIdWithIncludeAsync(bookId, x => x.Category);
-            EnsureExists(book, $"Book with id {bookId} was not found");
+            EnsureExists(book, $"Նշված գիրքը չի գտնվել․ Id = {bookId}");
 
             return _mapper.Map<BookModel>(book);
         }
@@ -53,15 +53,15 @@ namespace EipqLibrary.Infrastructure.Business.Services
         public async Task<BookModel> UpdateAsync(BookUpdateRequest updateRequest)
         {
             var existingBook = await _unitOfWork.BookRepository.GetByIdIncludingInstancesAndTheirBorrowings(updateRequest.Id);
-            EnsureExists(existingBook, $"Book with id {updateRequest.Id} does not exist");
+            EnsureExists(existingBook, $"Նշված գիրքը չի գտնվել․ Id = {updateRequest.Id}");
 
             if (!await _unitOfWork.CategoryRepository.ExistsAsync(x => x.Id == updateRequest.CategoryId))
             {
-                throw BadRequest($"Category with ID {updateRequest.CategoryId} does not exist");
+                throw BadRequest($"Նշված կատեգորիան չի գտնվել Id = {updateRequest.CategoryId}");
             }
             if (existingBook.TotalCount != updateRequest.Quantity)
             {
-                throw BadRequest("You cannot change the total quantity of a book");
+                throw BadRequest("Դուք չեք կարող փոփոխել գրքի ընդհանուր քանակը");
             }
             if (updateRequest.AvailableForBorrowingCount != existingBook.AvailableForBorrowingCount)
             {
@@ -110,9 +110,9 @@ namespace EipqLibrary.Infrastructure.Business.Services
                 {
                     if (removeableBorrowableInstancesCount == 0)
                     {
-                        throw BadRequest($"All borrowable books are either borrowed or reserved for future");
+                        throw BadRequest($"Բոլոր վերցնելու համար հասանելի գրքերը զբաղված են կամ ամրագրված");
                     }
-                    throw BadRequest($"Count of borrowable books can be reduced only by {removeableBorrowableInstancesCount}");
+                    throw BadRequest($"Վերցնելու համար նախատեսված գրքերից կարող է հեռացվել միայն {removeableBorrowableInstancesCount} հատ");
                 }
             }
         }

@@ -133,11 +133,11 @@ namespace EipqLibrary.Infrastructure.Business.Services
 
         //Private methods
         private static Exception InvalidUpdateException(string adminEmail) =>
-            new GeneralException($"Could not update user with email {adminEmail}");
+            new GeneralException($"Հետևյալ էլ․ հասցեով օգտագործողի թարմացումը ձախողվեց՝ {adminEmail}");
         private static Exception NonExistentAdminException(string adminEmail) =>
-            new EntityNotFoundException($"Could not find user with email {adminEmail}");
+            new EntityNotFoundException($"{adminEmail} էլ․ հասցեով օգտագործող չի գտնվել");
         private static Exception InvalidDeleteException(string adminEmail) =>
-            new GeneralException($"Could not delete user with email {adminEmail}");
+            new GeneralException($"Չհաջողվեց ջնջել հետևյալ էլ․ հասցեով օգտագործողին՝ {adminEmail}");
         private async Task<IdentityResult> SetAdminRoleAsync(AdminUser adminUser, Occupation newAdminOccupation)
         {
             return newAdminOccupation switch

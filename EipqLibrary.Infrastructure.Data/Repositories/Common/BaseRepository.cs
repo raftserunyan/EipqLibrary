@@ -33,7 +33,7 @@ namespace EipqLibrary.Infrastructure.Data.Repositories.Common
             var entity = await _context.Set<T>().FirstOrDefaultAsync(x => x.Id == id);
             if (entity == null)
             {
-                throw new BadDataException($"Entity with id {id} was not found");
+                throw new BadDataException($"Նշված ID-ով օբյեկտ չգտնվեց. ID = {id}");
             }
 
             _context.Set<T>().Remove(entity);

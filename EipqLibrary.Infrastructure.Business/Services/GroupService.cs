@@ -33,12 +33,12 @@ namespace EipqLibrary.Infrastructure.Business.Services
         {
             if (await _groupRepo.ExistsAsync(x => x.Number == groupCreationRequest.Number))
             {
-                throw new BadDataException($"Group '{groupCreationRequest.Number}' already exists");
+                throw new BadDataException($"'{groupCreationRequest.Number}' խումբը արդեն գոյություն ունի");
             }
 
             if (!await _professionService.ExistsAsync(groupCreationRequest.ProfessionId))
             {
-                throw new BadDataException($"Profession with ID {groupCreationRequest.ProfessionId} does not exist");
+                throw new BadDataException($"Նշված ID-ով մասնագիտություն չի գտնվել․ Id = {groupCreationRequest.ProfessionId}");
             }
 
             var group = _mapper.Map<Group>(groupCreationRequest);
@@ -52,7 +52,7 @@ namespace EipqLibrary.Infrastructure.Business.Services
         public async Task<GroupModel> GetActiveByNumberAsync(string groupNumber)
         {
             var group = await _groupRepo.GetFirstAsync(x => x.Number == groupNumber && x.GraduationDate > DateTime.Now);
-            EnsureExists(group, $"Group '{groupNumber}' not found in active groups");
+            EnsureExists(group, $"'{groupNumber}' խումբը չի գտնվել ակտիվ խմբերի ցուցակում");
 
             return _mapper.Map<GroupModel>(group);
         }

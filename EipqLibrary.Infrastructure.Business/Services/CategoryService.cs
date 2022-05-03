@@ -27,7 +27,7 @@ namespace EipqLibrary.Infrastructure.Business.Services
             var category = await _unitOfWork.CategoryRepository.GetFirstWithIncludeAsync(x => x.Name == categoryCreationRequest.Name);
 
             if (category != null)
-                throw new BadDataException("Category already exists");
+                throw new BadDataException("Նշված անունով կատեգորիա արդեն գոյություն ունի");
 
             category = _mapper.Map<Category>(categoryCreationRequest);
 
@@ -60,7 +60,7 @@ namespace EipqLibrary.Infrastructure.Business.Services
         public async Task<CategoryModel> UpdateAsync(CategoryUpdateRequest updateRequest)
         {
             var category = await _unitOfWork.CategoryRepository.GetByIdAsync(updateRequest.Id);
-            EnsureExists(category, $"Category with ID {updateRequest.Id} does not exist");
+            EnsureExists(category, $"Նշված կատեգորիան չի գտնվել․ Id = {updateRequest.Id}");
 
             _mapper.Map(updateRequest, category);
             await _unitOfWork.SaveChangesAsync();

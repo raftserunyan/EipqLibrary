@@ -12,7 +12,7 @@ namespace EipqLibrary.Infrastructure.Business.Services
             }
         }
 
-        protected BadDataException BadRequest(string message = "Bad Data")
+        protected BadDataException BadRequest(string message = "Անվավեր տվյալներ")
         {
             throw new BadDataException(message);
         }

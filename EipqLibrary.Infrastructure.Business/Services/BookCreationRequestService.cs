@@ -26,11 +26,11 @@ namespace EipqLibrary.Infrastructure.Business.Services
         public async Task AddAccountantAction(BookCreationRequestAccountantAction accountantAction)
         {
             var request = await _uow.BookCreationRequestRepository.GetByIdAsync(accountantAction.RequestId);
-            EnsureExists(request, $"BookCreationRequest with id {accountantAction.RequestId} does not exist");
+            EnsureExists(request, $"Նշված գրքի ստեղծման հայտը չի գտնվել․ Id = {accountantAction.RequestId}");
 
             if (request.RequestStatus != BookCreationRequestStatus.Pending)
             {
-                throw BadRequest("Accountant already acted on this request");
+                throw BadRequest("Հաշվապահը արդեն կատարել է գործողություն տվյալ հայտի հետ");
             }
 
             if (accountantAction.AccountantActionResult == BookCreationRequestStatus.Approved)
@@ -80,7 +80,7 @@ namespace EipqLibrary.Infrastructure.Business.Services
         {
             if (!await _uow.CategoryRepository.ExistsAsync(x => x.Id == bookAdditionRequest.CategoryId))
             {
-                throw BadRequest($"Category with id {bookAdditionRequest.CategoryId} does not exist");
+                throw BadRequest($"Նշված կատեգորիան չի գտնվել․ Id = {bookAdditionRequest.CategoryId}");
             }
 
             var bookCreationRequest = _mapper.Map<BookCreationRequest>(bookAdditionRequest);
@@ -94,11 +94,11 @@ namespace EipqLibrary.Infrastructure.Business.Services
         public async Task DeleteAsync(int id)
         {
             var entity = await _uow.BookCreationRequestRepository.GetByIdAsync(id);
-            EnsureExists(entity, $"BookCreationRequest with ID {id} does not exist");
+            EnsureExists(entity, $"Նշված գրքի ստեղծման հայտը չի գտնվել․ Id = {id}");
 
             if (entity.RequestStatus != Domain.Core.Enums.BookCreationRequestStatus.Pending)
             {
-                throw BadRequest("You can not delete a request which is already approved/rejected");
+                throw BadRequest("Դուք չեք կարող ջնջել հայտը որը արդեն հաստատվել կամ մերժվել է");
             }
 
             _uow.BookCreationRequestRepository.Delete(entity);
@@ -115,7 +115,7 @@ namespace EipqLibrary.Infrastructure.Business.Services
         public async Task<BookCreationRequestModel> GetByIdAsync(int id)
         {
             var request = await _uow.BookCreationRequestRepository.GetByIdWithIncludeAsync(id, x => x.Category);
-            EnsureExists(request, $"BookCreationRequest with id {id} was not found");
+            EnsureExists(request, $"Նշված գրքի ստեղծման հայտը չի գտնվել․ Id = {id}");
 
             return _mapper.Map<BookCreationRequestModel>(request);
         }
@@ -123,15 +123,15 @@ namespace EipqLibrary.Infrastructure.Business.Services
         public async Task<BookCreationRequestModel> UpdateAsync(UpdateBookCreationRequest updateRequest)
         {
             var entity = await _uow.BookCreationRequestRepository.GetByIdAsync(updateRequest.Id);
-            EnsureExists(entity, $"BookCreationRequest with the id {updateRequest.Id} does not exist");
+            EnsureExists(entity, $"Նշված գրքի ստեղծման հայտը չի գտնվել․ Id = {updateRequest.Id}");
 
             if (entity.RequestStatus != Domain.Core.Enums.BookCreationRequestStatus.Pending)
             {
-                throw BadRequest("You can not edit a request which is already approved/rejected");
+                throw BadRequest("Դուք չեք կարող փոփոխել հայտը որը արդեն հաստատվել կամ մերժվել է");
             }
 
             var category = await _uow.CategoryRepository.GetByIdAsync(updateRequest.CategoryId);
-            EnsureExists(category, $"Category with ID {updateRequest.CategoryId} was not found");
+            EnsureExists(category, $"Նշված կատեգորիան չի գտնվել․ Id = {updateRequest.CategoryId}");
 
             _mapper.Map(updateRequest, entity);
             entity.RequestLastUpdatedDate = System.DateTime.Now;

@@ -37,7 +37,7 @@ namespace EipqLibrary.Admin.Controllers
         {
             if (await _userService.GetByEmailOrDefaultAsync(adminCreationRequest.Email) != null)
             {
-                throw new BadDataException($"A user with email {adminCreationRequest.Email} already exists");
+                throw new BadDataException($"{adminCreationRequest.Email} էլ․ հասցեն արդեն օգտագործվում է");
             }
 
             var adminCreationDto = _mapper.Map<AdminCreationDto>(adminCreationRequest);

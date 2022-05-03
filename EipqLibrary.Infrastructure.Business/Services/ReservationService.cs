@@ -33,7 +33,7 @@ namespace EipqLibrary.Infrastructure.Business.Services
                 reservation.Status == ReservationStatus.Returned ||
                 reservation.Status == ReservationStatus.Cancelled)
             {
-                throw BadRequest("You can cancel only the requests which are not borrowed or cancelled yet");
+                throw BadRequest("Դուք կարող եք չեղարկել միայն դեռ չհաստատված ամրագրումները");
             }
 
             reservation.CancellationDate = DateTime.Now;
@@ -46,13 +46,13 @@ namespace EipqLibrary.Infrastructure.Business.Services
             var reservation = await _uow.ReservationRepository.GetByIdAsync(reservationId);
             if (reservation.UserId != userId)
             {
-                throw new UnauthorizedAccessException("You can only cancel your reservations");
+                throw new UnauthorizedAccessException("Դուք կարող եք չեղարկել միայն ձեր ամրագրումները");
             }
             if (reservation.Status == ReservationStatus.Borrowed ||
                 reservation.Status == ReservationStatus.Returned ||
                 reservation.Status == ReservationStatus.Cancelled)
             {
-                throw BadRequest("You can cancel only the requests which are not borrowed or cancelled yet");
+                throw BadRequest("Դուք կարող եք չեղարկել միայն դեռ չհաստատված ամրագրումները");
             }
 
             reservation.CancellationDate = DateTime.Now;
@@ -76,7 +76,7 @@ namespace EipqLibrary.Infrastructure.Business.Services
                     ReturnReservation(reservation);
                     break;
                 case ReservationStatus.Reserved:
-                    throw BadRequest("You can not set the status (back) to 'Reserved'");
+                    throw BadRequest("Դուք չեք կարող կարգավիճակը դնել նորից 'Ամրագրված'");
                     break;
                 default:
                     break;
@@ -89,7 +89,7 @@ namespace EipqLibrary.Infrastructure.Business.Services
         {
             //Check if the book being requested exists
             var book = await _uow.BookRepository.GetByIdWithInstancesAndReservationsAsync(request.BookId);
-            EnsureExists(book, $"A book with ID {request.BookId} does not exist");
+            EnsureExists(book, $"Նշված գիրքը չի գտնվել․ Id = {request.BookId}");
 
             //Keep only date part of the DateTimes
             request.ReturnDate = request.ReturnDate.DropTimePart();
@@ -102,10 +102,10 @@ namespace EipqLibrary.Infrastructure.Business.Services
             bool canBeReserved = IsThereFreeBookForTheInterval(book, request, ref availableBookInstanceId, ref suggestedTime);
             if (!canBeReserved)
             {
-                var message = $"There'll be no free instances of \"{book.Author} - {book.Name}\" for the specified time interval.";
+                var message = $"Նշված ժամանակահատվածի համար չկա հասանելի օրինակ \"{book.Author} - {book.Name}\" գրքից";
                 if (suggestedTime != null)
                 {
-                    message += $"Suggested time: starting from {suggestedTime.Value.ToShortDateString()}";
+                    message += $"Առաջարկվող ժամանակահատված՝ սկսած {suggestedTime.Value.ToShortDateString()}-ից";
                 }
 
                 throw BadRequest(message);
@@ -164,7 +164,7 @@ namespace EipqLibrary.Infrastructure.Business.Services
                 reservation.Status == ReservationStatus.Cancelled ||
                 reservation.Status == ReservationStatus.Borrowed)
             {
-                throw BadRequest("You can only borrow when the reservation status is still 'Reserved'");
+                throw BadRequest("Կարելի է վերցնել միայն 'Ամրագրված' կարգավիճակով ամրագրումները");
             }
 
             reservation.Status = ReservationStatus.Borrowed;
@@ -176,7 +176,7 @@ namespace EipqLibrary.Infrastructure.Business.Services
                 reservation.Status == ReservationStatus.Cancelled ||
                 reservation.Status == ReservationStatus.Borrowed)
             {
-                throw BadRequest("You can only cancel when the reservation status is 'Reserved'");
+                throw BadRequest("Կարելի է չեղարկել միայն 'Ամրագրված' կարգավիճակով ամրագրումները");
             }
 
             reservation.Status = ReservationStatus.Cancelled;
@@ -188,7 +188,7 @@ namespace EipqLibrary.Infrastructure.Business.Services
                 reservation.Status == ReservationStatus.Cancelled ||
                 reservation.Status == ReservationStatus.Returned)
             {
-                throw BadRequest("You can only return when the reservation status is 'Borrowed'");
+                throw BadRequest("Կարելի է վերադարձնել միայն 'Վերցված' կարգավիճակով ամրագրումները");
             }
 
             reservation.Status = ReservationStatus.Returned;

@@ -27,19 +27,19 @@ namespace EipqLibrary.Infrastructure.Business.Services
         public async Task AddAccountantAction(BookDeletionRequestAccountantAction accountantAction)
         {
             var request = await _uow.BookDeletionRequestRepository.GetByIdAsync(accountantAction.RequestId);
-            EnsureExists(request, $"Book deletion request with id {accountantAction.RequestId} does not exist");
+            EnsureExists(request, $"Նշված գրքի հեռացման հայտը չի գտնվել․ Id = {accountantAction.RequestId}");
 
             if (request.Status != BookDeletionRequestStatus.Pending)
             {
-                throw BadRequest("Accountant already acted on this request");
+                throw BadRequest("Հաշվապահը արդեն կատարել է գործողություն տվյալ հայտի հետ");
             }
             if (request.BookId == null)
             {
-                throw BadRequest("The book specified in this request does not exist(anymore)");
+                throw BadRequest("Տվյալ հայտում նշված գիրքը գոյություն չունի(այլևս)");
             }
 
             var book = await _uow.BookRepository.GetByIdWithIncludeAsync((int)request.BookId, x => x.Instances);
-            EnsureExists(book, $"Book with id {accountantAction.RequestId} does not exist");
+            EnsureExists(book, $"Նշված գիրքը չի գտնվել․ Id = {accountantAction.RequestId}");
 
             if (accountantAction.AccountantActionResult == BookDeletionRequestStatus.Rejected)
             {
@@ -69,7 +69,7 @@ namespace EipqLibrary.Infrastructure.Business.Services
 
             if (requestDto.Count > book.TotalCount)
             {
-                throw BadRequest("The count you've specified is exceeding the count of books in the library");
+                throw BadRequest("Ձեր կողմից նշված քանակը գերազանցում է գրադարանում առկա գրքերի ընդհանուր քանակը");
             }
 
             BookDeletionRequest deletionRequest = _mapper.Map<BookDeletionRequest>(requestDto);
@@ -82,7 +82,7 @@ namespace EipqLibrary.Infrastructure.Business.Services
                 var removeableBorrowableInstances = book.Instances.Where(x => x.CanBeRemovedFromBorrowablesList()).ToList();
                 if (removeableBorrowableInstances.Count < borrowableBooksDeletingCount)
                 {
-                    throw BadRequest($"For the moment only {book.AvailableForUsingInLibraryCount + removeableBorrowableInstances.Count} books can be removed");
+                    throw BadRequest($"Տվյալ պահին կարող է հեռացվել միայն {book.AvailableForUsingInLibraryCount + removeableBorrowableInstances.Count} գիրք");
                 }
 
                 for (int i = 0; i < borrowableBooksDeletingCount; i++)
@@ -113,15 +113,15 @@ namespace EipqLibrary.Infrastructure.Business.Services
         public async Task DeleteAsync(int id)
         {
             var entity = await _uow.BookDeletionRequestRepository.GetByIdWithIncludeAsync(id);
-            EnsureExists(entity, $"Book deletion request with ID {id} does not exist");
+            EnsureExists(entity, $"Նշված գրքի հեռացման հայտը չի գտնվել․ Id = {id}");
 
             if (entity.Status != BookDeletionRequestStatus.Pending)
             {
-                throw BadRequest("You can not delete a request which is already approved/rejected");
+                throw BadRequest("Դուք չեք կարող ջնջել հայտը որը արդեն հաստատվել կամ մերժվել է");
             }
 
             var book = await _uow.BookRepository.GetByIdWithIncludeAsync(entity.BookId ?? 0, x => x.Instances);
-            EnsureExists(book, "The book for the specified deletion request does not exist(anymore)");
+            EnsureExists(book, "Տվյալ հեռացման հայտում նշված գիրքը գոյություն չունի(այլևս)");
 
             if (entity.TemporarelyDeletedBorrowableBooksCount > 0)
             {
@@ -149,7 +149,7 @@ namespace EipqLibrary.Infrastructure.Business.Services
         public async Task<BookDeletionRequestModel> GetByIdAsync(int id)
         {
             var request = await _uow.BookDeletionRequestRepository.GetByIdWithIncludeAsync(id, x => x.Book);
-            EnsureExists(request, $"Book deletion request with id {id} was not found");
+            EnsureExists(request, $"Նշված գրքի հեռացման հայտը չի գտնվել․ Id = {id}");
 
             return _mapper.Map<BookDeletionRequestModel>(request);
         }
@@ -157,11 +157,11 @@ namespace EipqLibrary.Infrastructure.Business.Services
         public async Task<BookDeletionRequestModel> UpdateAsync(UpdateBookDeletionRequest updateRequest)
         {
             var entity = await _uow.BookDeletionRequestRepository.GetByIdWithIncludeAsync(updateRequest.RequestId, x => x.Book);
-            EnsureExists(entity, $"Book deletion request with id {updateRequest.RequestId} does not exist");
+            EnsureExists(entity, $"Նշված գրքի հեռացման հայտը չի գտնվել․ Id = {updateRequest.RequestId}");
 
             if (entity.Status != BookDeletionRequestStatus.Pending)
             {
-                throw BadRequest("You can not delete a request which is already approved/rejected");
+                throw BadRequest("Դուք չեք կարող փոփոխել հայտը որը արդեն հաստատվել կամ մերժվել է");
             }
 
             entity.Note = updateRequest.Note;
