@@ -37,11 +37,6 @@ namespace EipqLibrary.Admin.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<IActionResult> Get([FromQuery] PageInfo pageInfo, [FromQuery] UserSortOption userSort, [FromQuery] UserStatus? status)
         {
-            //if (!User.IsInRole(AdminRoleNames.SuperAdmin) && (status == null || status.Value == UserStatus.Deleted))
-            //{
-            //    return Unauthorized();
-            //}
-
             var customers = await _userService.GetAllAsync(pageInfo, userSort, status);
 
             if (!customers.Data.Any())
