@@ -49,6 +49,14 @@ namespace EipqLibrary.Admin.Controllers
             return Ok(customersModel);
         }
 
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUser([FromBody] UserUpdateRequest updateRequest)
+        {
+            var updatedUser = await _userService.UpdateAsync(updateRequest);
+
+            return Ok(updatedUser);
+        }
+
         [HttpPost("changeStatus")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<IActionResult> ChangeUserStatus([FromBody]UpdateUserStatusRequest customerUpdateRequest)

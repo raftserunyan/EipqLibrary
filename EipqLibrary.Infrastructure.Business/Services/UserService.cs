@@ -8,6 +8,7 @@ using EipqLibrary.Services.DTOs.RequestModels;
 using EipqLibrary.Services.Interfaces.ServiceInterfaces;
 using EipqLibrary.Shared.CustomExceptions;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace EipqLibrary.Infrastructure.Business.Services
@@ -86,10 +87,45 @@ namespace EipqLibrary.Infrastructure.Business.Services
             return userModel;
         }
 
+        public async Task<IEnumerable<UserModel>> GetByGroupIdAsync(int groupId)
+        {
+            var group = await _unitOfWork.GroupRepository.GetByIdWithIncludeAsync(groupId, x => x.Students);
+            EnsureExists(group, $"Նշված ID-ով խումբ չի գտնվել. Id = {groupId}");
+
+            return _mapper.Map<IEnumerable<UserModel>>(group.Students);
+        }
+
+        public async Task<UserModel> UpdateAsync(UserUpdateRequest updateRequest)
+        {
+            var groupId = await ValidateGroupNumberAsync(updateRequest.GroupNumber);
+
+            var user = await _userRepository.FindAsync(x => x.Id == updateRequest.Id);
+            if (user == null)
+            {
+                throw new BadDataException($"Հետևյալ Id-ով օգտագործող գոյություն չունի՝ {updateRequest.Id}");
+            }
+
+            _mapper.Map(updateRequest, user);
+            user.GroupId = groupId;
+            await _unitOfWork.SaveChangesAsync();
+
+            return _mapper.Map<UserModel>(user);
+        }
+
         private static Exception InvalidDeleteException(string email)
         {
             return new GeneralException($"Could not delete user with email {email}");
         }
+        
+        private async Task<int> ValidateGroupNumberAsync(string groupNumber)
+        {
+            var group = await _unitOfWork.GroupRepository.GetFirstAsync(x => x.Number == groupNumber);
+            if (group == null)
+            {
+                throw new BadDataException($"Նշված խումբը չի գտնվել՝ {groupNumber}");
+            }
 
+            return group.Id;
+        }
     }
 }

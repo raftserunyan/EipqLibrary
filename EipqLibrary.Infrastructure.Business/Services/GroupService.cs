@@ -5,6 +5,7 @@ using EipqLibrary.Services.DTOs.Models;
 using EipqLibrary.Services.DTOs.RequestModels;
 using EipqLibrary.Services.Interfaces.ServiceInterfaces;
 using EipqLibrary.Shared.CustomExceptions;
+using EipqLibrary.Shared.Utils.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -42,6 +43,8 @@ namespace EipqLibrary.Infrastructure.Business.Services
             }
 
             var group = _mapper.Map<Group>(groupCreationRequest);
+            group.CreationDate = group.CreationDate.DropTimePart();
+            group.GraduationDate = group.GraduationDate.DropTimePart();
 
             await _groupRepo.AddAsync(group);
             await _unitOfWork.SaveChangesAsync();

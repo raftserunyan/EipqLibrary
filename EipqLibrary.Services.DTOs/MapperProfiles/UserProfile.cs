@@ -22,6 +22,9 @@ namespace EipqLibrary.Services.DTOs.MapperProfiles
 
             CreateMap<UserDto, UserModel>();
             CreateMap<PagedData<UserDto>, PagedData<UserModel>>();
+
+            CreateMap<UserUpdateRequest, User>()
+                .ForMember(d => d.RegistrationDate, opts => opts.Ignore());
         }
     }
 }

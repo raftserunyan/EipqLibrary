@@ -11,6 +11,7 @@ namespace EipqLibrary.Infrastructure.Data.Repositories
         private readonly EipqLibraryDbContext _context;
         private IBookRepository _bookRepo;
         private ICategoryRepository _categoryRepo;
+        private IGroupRepository _groupRepo;
         private IBookInstanceRepository _bookInstanceRepo;
         private IReservationRepository _reservationRepo;
         private IBookCreationRequestRepository _bookCreationRequestRepo;
@@ -29,6 +30,10 @@ namespace EipqLibrary.Infrastructure.Data.Repositories
         public ICategoryRepository CategoryRepository
         {
             get { return _categoryRepo ??= new CategoryRepository(_context); }
+        }
+        public IGroupRepository GroupRepository
+        {
+            get { return _groupRepo ??= new GroupRepository(_context); }
         }
         public IBookCreationRequestRepository BookCreationRequestRepository
         {
