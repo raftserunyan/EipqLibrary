@@ -7,7 +7,7 @@ namespace EipqLibrary.Services.DTOs.Models
     public class ReservationModel
     {
         public int Id { get; set; }
-        public DateTime CreationDate { get; set; } = DateTime.Now;
+        public string CreationDate { get; set; }
         public string ExpectedBorrowingDate { get; set; }
         public string ExpectedReturnDate { get; set; }
 

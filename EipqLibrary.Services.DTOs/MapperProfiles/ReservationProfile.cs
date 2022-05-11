@@ -17,7 +17,8 @@ namespace EipqLibrary.Services.DTOs.MapperProfiles
             CreateMap<Reservation, ReservationModel>()
                 .ForMember(d => d.ExpectedBorrowingDate, opts => opts.MapFrom(s => s.ExpectedBorrowingDate.ToShortDateString()))
                 .ForMember(d => d.ExpectedReturnDate, opts => opts.MapFrom(s => s.ExpectedReturnDate.ToShortDateString()))
-                .ForMember(d => d.Book, opts => opts.MapFrom(s => s.BookInstance.Book));
+                .ForMember(d => d.Book, opts => opts.MapFrom(s => s.BookInstance.Book))
+                .ForMember(d => d.CreationDate, opts => opts.MapFrom(s => s.CreationDate.ToShortDateString()));
             CreateMap<PagedData<Reservation>, PagedData<ReservationModel>>();
         }
     }
