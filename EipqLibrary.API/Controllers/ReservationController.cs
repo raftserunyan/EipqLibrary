@@ -39,7 +39,7 @@ namespace EipqLibrary.API.Controllers
             var user = await GetCurrentStudentUserAsync();
             if (user == null)
             {
-                return new UnauthorizedObjectResult("You have to be logged in as a student/lecturer");
+                return new UnauthorizedObjectResult("Դուք պետք է մուտք գործած լինեք որպես ուսանող/դասախոս");
             }
 
             var reservation = await _reservationService.CreateAsync(request, user);
@@ -55,7 +55,7 @@ namespace EipqLibrary.API.Controllers
             var user = await GetCurrentStudentUserAsync();
             if (user == null)
             {
-                return new UnauthorizedObjectResult("You have to be logged in as a student/lecturer");
+                return new UnauthorizedObjectResult("Դուք պետք է մուտք գործած լինեք որպես ուսանող/դասախոս");
             }
 
             var reservations = await _reservationService.GetReservationsByUserIdAsync(user.Id, pageInfo, reservationSort, status);
@@ -67,15 +67,15 @@ namespace EipqLibrary.API.Controllers
         [Authorize]
         [HttpPost("{id}/cancel")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<IActionResult> CancelReservation([FromQuery]int id)
+        public async Task<IActionResult> CancelReservation([FromBody]CancelReservationRequest request)
         {
             var user = await GetCurrentStudentUserAsync();
             if (user == null)
             {
-                return new UnauthorizedObjectResult("You have to be logged in as a student/lecturer");
+                return new UnauthorizedObjectResult("Դուք պետք է մուտք գործած լինեք որպես ուսանող/դասախոս");
             }
 
-            await _reservationService.CancelReservationForStudentAsync(id, user.Id);
+            await _reservationService.CancelReservationForStudentAsync(request.id, user.Id);
             return Ok();
         }
 

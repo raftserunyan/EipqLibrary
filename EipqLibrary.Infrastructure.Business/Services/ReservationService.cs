@@ -102,7 +102,7 @@ namespace EipqLibrary.Infrastructure.Business.Services
             bool canBeReserved = IsThereFreeBookForTheInterval(book, request, ref availableBookInstanceId, ref suggestedTime);
             if (!canBeReserved)
             {
-                var message = $"Նշված ժամանակահատվածի համար չկա հասանելի օրինակ \"{book.Author} - {book.Name}\" գրքից";
+                var message = $"Նշված ժամանակահատվածի համար չկա հասանելի օրինակ \"{book.Author} - {book.Name}\" գրքից։ ";
                 if (suggestedTime != null)
                 {
                     message += $"Առաջարկվող ժամանակահատված՝ սկսած {suggestedTime.Value.ToShortDateString()}-ից";

@@ -17,7 +17,7 @@ namespace EipqLibrary.Shared.Utils.Attributes
                 }
             }
 
-            return new ValidationResult("The sum of 'AvailableForBorrowingCount' and 'AvailableForUsingInLibraryCount' must be equal to 'TotalCount'");
+            return new ValidationResult("'Հասանելի տանելու համար' և 'Հասանելի գրադարանում կարդալու համար' դաշտերի գումարը պետք է հավասար լինի ընդհանուր քանակին");
         }
     }
 }

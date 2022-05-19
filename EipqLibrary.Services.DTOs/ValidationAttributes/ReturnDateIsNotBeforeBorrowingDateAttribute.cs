@@ -17,7 +17,7 @@ namespace EipqLibrary.Services.DTOs.ValidationAttributes
                 }
             }
 
-            return new ValidationResult("Return date can not be earlier than borrowing date");
+            return new ValidationResult("Վերադաձնելու օրը չի կարող լինել վերցնելու օրվանից ավելի շուտ");
         }
     }
 }

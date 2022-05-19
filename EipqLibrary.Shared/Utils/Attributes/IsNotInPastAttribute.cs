@@ -16,7 +16,7 @@ namespace EipqLibrary.Shared.Utils.Attributes
                 }
             }
 
-            return new ValidationResult("You may not specify a date in the past");
+            return new ValidationResult("Դուք չեք կարող նշել անցյալի ամսաթիվ");
         }
     }
 }
